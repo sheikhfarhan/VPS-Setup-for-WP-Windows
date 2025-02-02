@@ -28,13 +28,13 @@ VLE-4: ~ SGD 16/mth : 4 vCPU | 4 GB Ram | 40 GB
 ~ SGD 25/mth: 2vCPU | 2GB Ram | 60 GB NVMe SSD
 
 For this test deployment, using Digital Ocean, since have $200 free referral credits to use up within the next 60 days :)\
-Production site will most probably go with Hetzner or OVH SG for its competitive price.
+Get your free $200 here with my referral code: https://m.do.co/c/97213212086d
 
 ## SSH Keys
 
 Generate 2 sets of private+public keys (can use Putty, CLI via Windows Powershell or Termius):\
 root-key\
-admin-key
+yourown/user-key
 
 ## Generate keys via PowerShell or Termius app or Putty
 ### Using Powershell 7.x in Windows 11 as main client:
@@ -51,11 +51,13 @@ Passphrase: xxxxxx
 
 All keys are autosave to: C:/user/$User/.ssh
 
+_(when all is okay, can consider to remove the private keys from local PC and store it at Bitrwarden for safekeeping!)_
+
 Close Terminal
 
 ## Set the sshd service to start automatically
 
-Open PowerShell as Administrator and enter:
+Open PowerShell as **Administrator** and enter:
 
 `Get-Service -Name sshd | Set-Service -StartupType Automatic`
 
@@ -81,44 +83,100 @@ Setup [ssh-agent] to securely store the private keys within Windows security con
 `ssh-add $env:USERPROFILE\.ssh\root-key`\
 `ssh-add $env:USERPROFILE\.ssh\admin-key`
 
+![image](https://github.com/user-attachments/assets/ca082e96-614b-4be4-aa40-b7183496c326)
+
 The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
 Create new set of keys for each devices (Tablet, Phone) to SSH in. Then standby to add those public keys onto the server when ready.
 
 ## Initiate & Deployment of Server
 
-When signing up with DO, Hetzner or any other VPS providers, and if there is an option to “park” public keys at their console, can paste in 2 public keys.\
-If not sign up account and deploy with root password.
+For DO, Hetzner or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
+If not, deploy with root password.
 
-SSH into the server via root access:
+![image](https://github.com/user-attachments/assets/ea987cd3-81eb-4212-8f06-e270c66950f4)
 
-From Powershell:
-$ SSH root@{IP address}
+**Hostname: dosvr1**
 
-Or if cannot
+## SSH in via Powershell/Windows as client
 
-$ SSH root@{VPS IP address} -i ~/.ssh/root-key
+Since we rename the keys to some other name than the default names (id_rsa etc..), additional steps for Windows .ssh agent / client to SSH into the server:
 
-Initial Housekeeping
+### Config file for User in Windows
+
+Run Powershell as **Administrator**
+
+```
+cd C:/Users/$USER/.ssh
+```
+
+Create config file (example if have VSCode installed)
+
+```
+code config
+```
+
+or 
+
+```
+type nul > config
+```
+
+Specifying Identityfile for SSH:
+
+```
+# Per-Host Per User basis config
+Host dosvr1-root (to remove when the dust settles)
+    Hostname {VPS IP Address} 
+    User root
+    Identityfile C:/Users/$USER/.ssh/root-key
+    IdentitiesOnly yes
+
+Host dosvr1-user
+    Hostname {VPS IP Address} 
+    User user
+    Identityfile C:/Users/$USER/.ssh/admin-key
+    IdentitiesOnly yes
+```
+
+Exit terminal
+
+## SSH into the server via root access:
+
+From Powershell:\
+```
+ssh dosvr1
+```
+
+Or
+
+```
+ssh root@{VPS IP address} -i ~/.ssh/root-key
+```
+
+![image](https://github.com/user-attachments/assets/e034de48-61e0-4d28-adb2-915fbdd1a6d0)
+
+
+## Initial Housekeeping
 
 $ apt update && apt -y upgrade && apt -y install curl wget
 $ apt-get autoremove && apt-get autoclean
 $ shutdown -r now
 
-Change System Time / Change Time and Time Zone:
+### Change System Time / Change Time and Time Zone:
 $ dpkg-reconfigure tzdata
 
 Follow on screen instructions to set timezone. 
 
-Restart cron to ensure system pick up the change
+### Restart cron to ensure system pick up the change
 $ service cron restart
 
-Disable unattended upgrades:
+### Disable unattended upgrades:
 $ dpkg-reconfigure unattended-upgrades
 
 or can remove it completely:
 $ apt remove unattended-upgrades
 
-Check SSH authorizedkeys file and the 2 public keys are in the /root/.ssh folder\
+### Check SSH authorizedkeys file and the 2 public keys are in the /root/.ssh folder\
 If not:
 
 Create (if not already) folders for .ssh and a file for authorized_keys:
@@ -129,7 +187,7 @@ $ vim authorized_keys
 
 Then put the relevant public keys in here. If already have the public keys for Tablet/Phone devices entry points, can add them in now.
 
-# Make the directory and file only executable by the root and setup ownership and permissions:
+### Make the directory and file only executable by the root and setup ownership and permissions:
 
 $ chmod 700 ~/.ssh
 $ chmod 600 ~/.ssh/authorized_keys
@@ -137,17 +195,17 @@ $ chown -R root:root ~/.ssh
 
 $ service ssh restart
 
-Restart the sshd daemon, still as root, with:
+### Restart the sshd daemon, still as root, with:
 $ systemctl restart sshd
 $ exit
 
-Note:
+_Note:
 All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files, so if need be, root specific ones.
-Cannot simply add the public key generated for the root account in the /home/yournameuser/.ssh/authorized_keys file - it seems that the system doesn't look there for root access.
+Cannot simply add the public key generated for the root account in the /home/yournameuser/.ssh/authorized_keys file - it seems that the system doesn't look there for root access._
 
-Create new user
+## Create new user
 
-Create new sudo user: user
+### Create new sudo user: user
 
 $ adduser user
 $ usermod -aG sudo user
@@ -155,21 +213,23 @@ $ usermod -aG adm user
 
 Password: xxxxx
 
-#Create the folder if it doesn't already exist:
+### Create the folder if it doesn't already exist:
 $ mkdir /home/$USER/.ssh
 
-# Copy the authorized_keys file that contains the public keys:
+### Copy the authorized_keys file that contains the public keys:
 $ sudo cp /root/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys
 
-# Make the directory and file only executable by the root and setup ownership and permissions:
+### Make the directory and file only executable by the root and setup ownership and permissions:
 
 $ chmod 700 /home/$USER/.ssh
 $ sudo chown -R $USER:$USER /home/$USER/.ssh
 $ sudo chmod 600 /home/$USER/.ssh/authorized_keys
 
+### Restart ssh
+
 $ service ssh restart
 
-Log out and log back in
+**Log out and log back in**
 
 Change some settings for SSH
 
