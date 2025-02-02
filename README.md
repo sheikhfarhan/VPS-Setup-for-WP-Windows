@@ -59,14 +59,14 @@ Open PowerShell as Administrator and enter:
 
 `Get-Service -Name sshd | Set-Service -StartupType Automatic`
 
-#### Now start the sshd service
+## Now start the sshd service
 `Start-Service sshd`
 
-### Setup [ssh-agent]:
+## Setup [ssh-agent]:
 
 Setup [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account + To start the [ssh-agent] service each time the computer is rebooted + Using [ssh-add] to store the private key (By default the [ssh-agent] service is disabled) and to configure it to start automatically.
 
-### Run Powershell as Administrator
+**Run Powershell as Administrator**
 
 #### Get ssh-agent to start automatically
 `Get-Service ssh-agent | Set-Service -StartupType Automatic`
@@ -82,10 +82,9 @@ Setup [ssh-agent] to securely store the private keys within Windows security con
 `ssh-add $env:USERPROFILE\.ssh\admin-key`
 
 The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
-Upload both keys into Termius and JuiceSSH on tablet and phone. Or create new set of keys for each devices to SSH in. Then standby to add those public keys onto the server when ready.
+Create new set of keys for each devices (Tablet, Phone) to SSH in. Then standby to add those public keys onto the server when ready.
 
-
-Initiate & Deployment of Server
+## Initiate & Deployment of Server
 
 When signing up with DO, Hetzner or any other VPS providers, and if there is an option to “park” public keys at their console, can paste in 2 public keys.\
 If not sign up account and deploy with root password.
