@@ -36,7 +36,7 @@ Generate 2 sets of private+public keys (can use Putty, CLI via Windows Powershel
 root-key\
 admin-key
 
-## Generate keys via powershell or termius app or putty\
+## Generate keys via PowerShell or Termius app or Putty
 ### Using Powershell 7.x in Windows 11 as main client:
 
 Install Powershell 7.x from Windows Store\
