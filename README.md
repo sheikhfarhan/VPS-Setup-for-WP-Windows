@@ -36,7 +36,7 @@ Generate 2 sets of private+public keys (can use Putty, CLI via Windows Powershel
 root-key\
 own/user-key
 
-### Generate keys via PowerShell or Termius app or Putty
+### Generate Keys via PowerShell or Termius app or Putty
 
 **Using Powershell 7.x in Windows 11 as main client:**
 
@@ -45,20 +45,30 @@ Open up PowerShell\
 Generate SSH keys:
 
 ```
-ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/root-key`\
+ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/root-key -C ""
 ```
 Passphrase: xxxxxx
 
 ```
-ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/admin-key`\
+ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/admin-key -C ""
 ```
 Passphrase: xxxxxx
 
-All keys are autosave to: C:/user/$User/.ssh
+![image](https://github.com/user-attachments/assets/71c7312e-02ab-4c53-af17-3d94abe3176b)
+
+### Check ~/.ssh folder
+
+![image](https://github.com/user-attachments/assets/f6224d3c-96a7-47e2-86d4-f6484a6f3c80)
+
+_Note:
+Can add any nickname/comment after -C\
+eg: -C homepc\
+-C "" will not have any comments in the keys_
+\
+\
+All keys are autosave to: C:/user/$User/.ssh**
 
 _(when all is okay, can consider to remove the private keys from local PC and store it at Bitwarden for safekeeping!)_
-
-Close Terminal
 
 ### Set the sshd service to start automatically
 
@@ -72,6 +82,8 @@ Get-Service -Name sshd | Set-Service -StartupType Automatic
 ```
 Start-Service sshd
 ```
+
+![image](https://github.com/user-attachments/assets/79870ac2-8e97-4848-bcb6-08482c38d409)
 
 ### Setup [ssh-agent]:
 
@@ -96,11 +108,10 @@ Get-Service ssh-agent
 
 ### Load key files into [ssh-agent]:
 ```
-ssh-add $env:USERPROFILE\.ssh\root-key\
+ssh-add $env:USERPROFILE\.ssh\root-key
 ssh-add $env:USERPROFILE\.ssh\admin-key
 ```
-
-![image](https://github.com/user-attachments/assets/ca082e96-614b-4be4-aa40-b7183496c326)
+![image](https://github.com/user-attachments/assets/f721df40-b4e5-45c4-aea1-d96d5b2dd54c)
 
 The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
 Create new set of keys for each devices (Tablet, Phone) to SSH in.\
@@ -111,8 +122,19 @@ Then standby to add those public keys onto the server when ready.
 For DO, Hetzner or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
 If not, deploy with root password.
 
-![image](https://github.com/user-attachments/assets/ea987cd3-81eb-4212-8f06-e270c66950f4)
+![image](https://github.com/user-attachments/assets/9aac8630-a18d-4b5f-932b-6724952b721c)
 
+After adding your own public SSH keys in
+
+![image](https://github.com/user-attachments/assets/a2b8c4fa-4e3e-4737-bcd7-492544ed8143)
+
+When creating server, can have options to auto push the public keys in for a password-less entry.
+
+![image](https://github.com/user-attachments/assets/afd771ab-b713-429d-b90c-8f7ad61e7749)
+
+### Server created!
+
+![image](https://github.com/user-attachments/assets/d2d0cf40-d284-4901-8fdc-4eb1b78052ab)
 **Hostname: dosvr1**
 
 ## Create config file for Powershell/Windows as client
@@ -124,7 +146,7 @@ Since we rename the keys to some other name than the default names (id_rsa etc..
 Run Powershell as **Administrator**
 
 ```
-cd C:/Users/$USER/.ssh
+cd C:/Users/{user}/.ssh
 ```
 
 ### Create config file (example if have VSCode installed)
@@ -136,42 +158,40 @@ code config
 or 
 
 ```
-type nul > config
+New-Item config
 ```
 
 ### Specifying Identityfile for SSH:
 
-Can replace Host (which is an alias, sort of shortcut name) to anything
-Hostname is usually IP address or domain
-IdentityFile is the path to the private keys
-\
-\
-Add some configs to the config file as follows:
+Can replace Host (which is an alias, sort of shortcut name) to anything\
+Hostname is usually IP address or domain\
+IdentityFile is the path to the private keys\
+Can open the config file using Notepad from Windows Explorer\
 
+### Add the following configs to the config file:
 ```
 # Per-Host Per User basis config
 # this is for root access
 Host dosvr1-root # to remove when set up with sudo user is okay
     Hostname {VPS IP Address} 
     User root
-    Identityfile C:/Users/$USER/.ssh/root-key
+    Identityfile C:/Users/{user}/.ssh/root-key
     IdentitiesOnly yes
 
 # this is main user access
 Host dosvr1-admin
     Hostname {VPS IP Address} 
     User user
-    Identityfile C:/Users/$USER/.ssh/admin-key
+    Identityfile C:/Users/{user}/.ssh/admin-key
     IdentitiesOnly yes
 ```
-
 Save file and Exit terminal
 
 ## SSH into the server via root access:
 
 From Powershell:\
 ```
-ssh dosvr1
+ssh dosvr1-root
 ```
 
 Or
@@ -180,85 +200,112 @@ Or
 ssh root@{VPS IP address} -i ~/.ssh/root-key
 ```
 
-![image](https://github.com/user-attachments/assets/e034de48-61e0-4d28-adb2-915fbdd1a6d0)
-
+![image](https://github.com/user-attachments/assets/0a1de47f-73d0-4156-9565-76c062204c75)
 
 ## Initial Housekeeping
 
-$ apt update && apt -y upgrade && apt -y install curl wget
-$ apt-get autoremove && apt-get autoclean
-$ shutdown -r now
+```
+apt update && apt -y upgrade && apt -y install curl wget
+```
+```
+apt-get autoremove && apt-get autoclean
+```
+Reboot the server
+```
+shutdown -r now
+```
 
 ### Change System Time / Change Time and Time Zone:
-$ dpkg-reconfigure tzdata
-
+```
+dpkg-reconfigure tzdata
+```
 Follow on screen instructions to set timezone. 
 
 ### Restart cron to ensure system pick up the change
-$ service cron restart
+```
+service cron restart
+```
 
 ### Disable unattended upgrades:
-$ dpkg-reconfigure unattended-upgrades
-
+```
+dpkg-reconfigure unattended-upgrades
+```
 or can remove it completely:
-$ apt remove unattended-upgrades
-
-### Check SSH authorizedkeys file and the 2 public keys are in the /root/.ssh folder\
+```
+apt remove unattended-upgrades
+```
+### Check SSH authorizedkeys file and the 2 public keys are in the /root/.ssh folder
 If not:
-
-Create (if not already) folders for .ssh and a file for authorized_keys:
-$ cd /root
-$ mkdir .ssh
-$ cd .ssh
-$ vim authorized_keys
-
+### Create folders for .ssh and a file for authorized_keys:
+```
+cd /root
+mkdir .ssh
+cd .ssh
+code authorized_keys
+```
 Then put the relevant public keys in here. If already have the public keys for Tablet/Phone devices entry points, can add them in now.
 
 ### Make the directory and file only executable by the root and setup ownership and permissions:
-
-$ chmod 700 ~/.ssh
-$ chmod 600 ~/.ssh/authorized_keys
-$ chown -R root:root ~/.ssh
-
+```
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+chown -R root:root ~/.ssh
+```
+### Restart SSH service
+```
 $ service ssh restart
-
+```
 ### Restart the sshd daemon, still as root, with:
-$ systemctl restart sshd
-$ exit
+```
+systemctl restart sshd
+```
 
 _Note:
-All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files, so if need be, root specific ones.
-Cannot simply add the public key generated for the root account in the /home/yournameuser/.ssh/authorized_keys file - it seems that the system doesn't look there for root access._
+All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files, so if need root specific public keys, need a seperate authorized_keys file in /root/.ssh/ and 
+in /home/yournameuser/.ssh/_
 
 ## Create new user
 
-### Create new sudo user: user
+### Create new sudo user
 
-$ adduser user
-$ usermod -aG sudo user
-$ usermod -aG adm user
-
+```
+adduser user
+usermod -aG sudo user
+usermod -aG adm user
+```
 Password: xxxxx
 
 ### Create the folder if it doesn't already exist:
-$ mkdir /home/$USER/.ssh
-
+```
+mkdir /home/$USER/.ssh
+```
 ### Copy the authorized_keys file that contains the public keys:
-$ sudo cp /root/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys
-
-### Make the directory and file only executable by the root and setup ownership and permissions:
-
-$ chmod 700 /home/$USER/.ssh
-$ sudo chown -R $USER:$USER /home/$USER/.ssh
-$ sudo chmod 600 /home/$USER/.ssh/authorized_keys
-
+```
+cp /root/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys
+```
+### Setup ownership and permissions:
+```
+chown -R $USER:$USER /home/$USER/.ssh
+chmod 700 /home/$USER/.ssh
+chmod 600 /home/$USER/.ssh/authorized_keys
+```
 ### Restart ssh
+```
+service ssh restart
+```
+** Before logging out root account, ssh via new user**
 
-$ service ssh restart
+## SSH in via sudo user
+Open new Powershell terminal
+```
+ssh dosvr1-user
+```
+_Note:
+The "dosvr1-user" is what we defined in the config file above_
 
-**Log out and log back in**
+############################################################################
 
-Change some settings for SSH
+## Change some settings for SSH
 
 Disable password authorization first then change SSH Port when UFW is set up
 
@@ -288,15 +335,17 @@ $ sudo systemctl restart sshd
 
 Before logging off, if using windows 11/Powershell as a terminal to SSH in, need to add new port number in the client's .ssh config file
 
-Run Powershell as Administrator and Open config file
+### Run Powershell as Administrator and Open config file
 ```
-vim cd C:/Users/$USER/.ssh/config
+code C:/Users/$USER/.ssh/config
 ```
 
-Add the new port number in
+Alternatively, can open the file directly via Notepad in Windows and edit-save the file.
+
+### Add the new port number in config file
 
 ```
-# Per-Host Per User basis config\
+# Per-Host Per User basis config
 # this is main root access
 Host dosvr1-root # to remove when the dust settles
     Hostname {VPS IP Address} 
@@ -305,6 +354,7 @@ Host dosvr1-root # to remove when the dust settles
     Identityfile C:/Users/$USER/.ssh/root-key
     IdentitiesOnly yes
 
+# this is user access
 Host dosvr1-user
     Hostname {VPS IP Address} 
     Port 22022
