@@ -8,7 +8,7 @@ Date: 30 Jan 2025
 
 ## VPS (Virtual Private Server)
 
-Some options here. All with SG-located datacenter. Going for a minimum of 2GB Ram.
+Options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
 **Digital Ocean:**\
 ~ SGD 11/mth: 1 vCPU | 1GB Ram | 35 GB NVMe SSD\
@@ -28,65 +28,83 @@ VLE-4: ~ SGD 16/mth : 4 vCPU | 4 GB Ram | 40 GB
 ~ SGD 25/mth: 2vCPU | 2GB Ram | 60 GB NVMe SSD
 
 For this test deployment, using Digital Ocean, since have $200 free referral credits to use up within the next 60 days :)\
-Get your free $200 here with my referral code: https://m.do.co/c/97213212086d
+Get your free $200 credit here: https://m.do.co/c/97213212086d
 
 ## SSH Keys
 
 Generate 2 sets of private+public keys (can use Putty, CLI via Windows Powershell or Termius):\
 root-key\
-yourown/user-key
+own/user-key
 
-## Generate keys via PowerShell or Termius app or Putty
-### Using Powershell 7.x in Windows 11 as main client:
+### Generate keys via PowerShell or Termius app or Putty
+
+**Using Powershell 7.x in Windows 11 as main client:**
 
 Install Powershell 7.x from Windows Store\
 Open up PowerShell\
 Generate SSH keys:
 
-`ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/root-key`\
+```
+ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/root-key`\
+```
 Passphrase: xxxxxx
 
-`ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/admin-key`\
+```
+ssh-keygen -t ed25519 -f C:/Users/$User/.ssh/admin-key`\
+```
 Passphrase: xxxxxx
 
 All keys are autosave to: C:/user/$User/.ssh
 
-_(when all is okay, can consider to remove the private keys from local PC and store it at Bitrwarden for safekeeping!)_
+_(when all is okay, can consider to remove the private keys from local PC and store it at Bitwarden for safekeeping!)_
 
 Close Terminal
 
-## Set the sshd service to start automatically
+### Set the sshd service to start automatically
 
 Open PowerShell as **Administrator** and enter:
 
-`Get-Service -Name sshd | Set-Service -StartupType Automatic`
+```
+Get-Service -Name sshd | Set-Service -StartupType Automatic
+```
 
-## Now start the sshd service
-`Start-Service sshd`
+### Start the sshd service
+```
+Start-Service sshd
+```
 
-## Setup [ssh-agent]:
+### Setup [ssh-agent]:
 
-Setup [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account + To start the [ssh-agent] service each time the computer is rebooted + Using [ssh-add] to store the private key (By default the [ssh-agent] service is disabled) and to configure it to start automatically.
+Setup [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account + To start the [ssh-agent] service each time the computer is rebooted + Using [ssh-add] to store the private key (By default the [ssh-agent] service is disabled) + To configure it to start automatically.
 
 **Run Powershell as Administrator**
 
-#### Get ssh-agent to start automatically
-`Get-Service ssh-agent | Set-Service -StartupType Automatic`
+### Get ssh-agent to start automatically
+```
+Get-Service ssh-agent | Set-Service -StartupType Automatic
+```
 
-#### Start the service: 
-`Start-Service ssh-agent`
+### Start the service: 
+```
+Start-Service ssh-agent
+```
 
-#### This should return a status of Running
-`Get-Service ssh-agent`
+### This should return a status of Running
+```
+Get-Service ssh-agent
+```
 
 ### Load key files into [ssh-agent]:
-`ssh-add $env:USERPROFILE\.ssh\root-key`\
-`ssh-add $env:USERPROFILE\.ssh\admin-key`
+```
+ssh-add $env:USERPROFILE\.ssh\root-key\
+ssh-add $env:USERPROFILE\.ssh\admin-key
+```
 
 ![image](https://github.com/user-attachments/assets/ca082e96-614b-4be4-aa40-b7183496c326)
 
 The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
-Create new set of keys for each devices (Tablet, Phone) to SSH in. Then standby to add those public keys onto the server when ready.
+Create new set of keys for each devices (Tablet, Phone) to SSH in.\
+Then standby to add those public keys onto the server when ready.
 
 ## Initiate & Deployment of Server
 
@@ -97,7 +115,7 @@ If not, deploy with root password.
 
 **Hostname: dosvr1**
 
-## SSH in via Powershell/Windows as client
+## Create config file for Powershell/Windows as client
 
 Since we rename the keys to some other name than the default names (id_rsa etc..), additional steps for Windows .ssh agent / client to SSH into the server:
 
@@ -109,7 +127,7 @@ Run Powershell as **Administrator**
 cd C:/Users/$USER/.ssh
 ```
 
-Create config file (example if have VSCode installed)
+### Create config file (example if have VSCode installed)
 
 ```
 code config
@@ -121,24 +139,33 @@ or
 type nul > config
 ```
 
-Specifying Identityfile for SSH:
+### Specifying Identityfile for SSH:
+
+Can replace Host (which is an alias, sort of shortcut name) to anything
+Hostname is usually IP address or domain
+IdentityFile is the path to the private keys
+\
+\
+Add some configs to the config file as follows:
 
 ```
 # Per-Host Per User basis config
-Host dosvr1-root (to remove when the dust settles)
+# this is for root access
+Host dosvr1-root # to remove when set up with sudo user is okay
     Hostname {VPS IP Address} 
     User root
     Identityfile C:/Users/$USER/.ssh/root-key
     IdentitiesOnly yes
 
-Host dosvr1-user
+# this is main user access
+Host dosvr1-admin
     Hostname {VPS IP Address} 
     User user
     Identityfile C:/Users/$USER/.ssh/admin-key
     IdentitiesOnly yes
 ```
 
-Exit terminal
+Save file and Exit terminal
 
 ## SSH into the server via root access:
 
@@ -259,19 +286,19 @@ $ sudo service ssh restart
 
 $ sudo systemctl restart sshd
 
-Before logging off, if using windows 11/Powershell as a terminal to SSH in, do this:
+Before logging off, if using windows 11/Powershell as a terminal to SSH in, need to add new port number in the client's .ssh config file
 
-Config Windows to use port 22022 to SSH in
+Run Powershell as Administrator and Open config file
+```
+vim cd C:/Users/$USER/.ssh/config
+```
 
-Run Powershell as Administrator
-$ cd C:/Users/$USER/.ssh
+Add the new port number in
 
-Create new config file
-$ code config
-
-Paste in file: 
-# Per-Host Per User basis config
-Host dosvr1-root (to remove when the dust settles)
+```
+# Per-Host Per User basis config\
+# this is main root access
+Host dosvr1-root # to remove when the dust settles
     Hostname {VPS IP Address} 
     Port 22022
     User root
@@ -284,9 +311,11 @@ Host dosvr1-user
     User user
     Identityfile C:/Users/$USER/.ssh/admin-key
     IdentitiesOnly yes
+```
 
 Other examples of configs:
 
+```
 # Config for use specific key for github
 Host github.com
 HostName github.com
@@ -304,10 +333,10 @@ IdentitiesOnly yes
 # For all other servers
 Host *
 User root
+```
+Before logging off, Start a new terminal to SSH in to test
 
-Start a new terminal to SSH in
-
-Fail2ban & UFW
+## Fail2ban & UFW
 
 Secure SSH via UFW (HestiaCP no need)
 
