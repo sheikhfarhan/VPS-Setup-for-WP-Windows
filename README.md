@@ -4,73 +4,72 @@ Date: 30 Jan 2025
 
 // some intro goes here //
 
-
++ Main workstation: Windows 11 PC
++ Terminal: Powershell 7.x
++ 1 x Admin/User use-case (me)
++ 1 x main SSH key (mine)
 
 ## Select a VPS (Virtual Private Server) Provider
 
 Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
-**Digital Ocean:**\
-~ SGD 11/mth: 1 vCPU | 1GB Ram | 35 GB NVMe SSD\
-~ SGD 22/mth: 1 vCPU | 2GB Ram | 70 GB NVMe SSD\
-~ SGD 23/mth: 2 vCPU | 2 GB Ram | 90 GB NVMe SSD
+**Digital Ocean:**
++ ~ SGD 11/mth: 1 vCPU | 1GB Ram | 35 GB NVMe SSD
++ ~ SGD 22/mth: 1 vCPU | 2GB Ram | 70 GB NVMe SSD
++ ~ SGD 23/mth: 2 vCPU | 2 GB Ram | 90 GB NVMe SSD
 
-**Hetzner:**\
-~ SGD 14/mth: 2 vCPU | 2 GB Ram | 40 GB NVME SSD
+**Hetzner:**
++ ~ SGD 14/mth: 2 vCPU | 2 GB Ram | 40 GB NVME SSD
 
-**OVH SG:**\
-VLE-2: ~ SGD 8/mth : 2 vCPU | 2 GB Ram | 40 GB NVME SSD\
-VLE-4: ~ SGD 16/mth : 4 vCPU | 4 GB Ram | 40 GB  
+**OVH SG:**
++ VLE-2: ~ SGD 8/mth : 2 vCPU | 2 GB Ram | 40 GB NVME SSD
++ VLE-4: ~ SGD 16/mth : 4 vCPU | 4 GB Ram | 40 GB  
 
-**Vultr:**\
-~ SGD 8/mth: 1 vCPU | 1 GB Ram | 25 GB NVMe SSD\
-~ SGD 16/mth: 1vCPU | 2GB Ram | 50 GB NVMe SSD\
-~ SGD 25/mth: 2vCPU | 2GB Ram | 60 GB NVMe SSD
+**Vultr:**
++ ~ SGD 8/mth: 1 vCPU | 1 GB Ram | 25 GB NVMe SSD
++ ~ SGD 16/mth: 1vCPU | 2GB Ram | 50 GB NVMe SSD
++ ~ SGD 25/mth: 2vCPU | 2GB Ram | 60 GB NVMe SSD
 
-For this test deployment, using Digital Ocean, since have $200 free referral credits to use up within the next 60 days :)\
+For this test deployment, am using Digital Ocean since I have $200 free referral credits to use up within the next 60 days :)\
 Get your free $200 credit here: https://m.do.co/c/97213212086d
-
-## SSH Keys Setup
-
-Main workstation: Windows 11 PC\
-Terminal: Powershell 7.x\
-1 x Admin/User use-case (me)
 
 ## Install Powershell 7.5 / 7.x
 
-Install Powershell 7.x from Windows Store\
-Other methods of installation and guide here:\
-https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5 \
-Start PowerShell as user
++ Install Powershell 7.x from Windows Store
++ Other methods of installation and guide here:
+https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
++ Start PowerShell
 
-## Generate Keys via PowerShell
+![image](https://drive.google.com/uc?export=view&id=130cV5uuvJmtIihQX7jkdeLXtvQ2g4uOT)
+
+## SSH Keys Setup
+
+#### Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 ```
 Passphrase: xxxxxx
 
-![image](https://github.com/user-attachments/assets/71c7312e-02ab-4c53-af17-3d94abe3176b)
+![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
-### Check Windows User ~/.ssh folder
+#### Check Windows User ~/.ssh folder
 
 ```
 ls
 ```
-
-![image](https://github.com/user-attachments/assets/f6224d3c-96a7-47e2-86d4-f6484a6f3c80)
+![image](https://drive.google.com/uc?export=view&id=135mjes1PrPOyMhpw_DBJEWFcAr7RG7Vk)
 
 > [!NOTE]
-> Can add any nickname/comment after -C\
-> eg: -C homepc\
-> -C "" will not have any comments in the keys
-> Can remove the private keys from local directory after adding key to [ssh=add] setup and store it at Bitwarden for safekeeping
+> + Can add any nickname/comment after -C (eg: -C homepc)
+> + -C "" will not have any comments in the keys
+> + Can remove the private keys from local directory after adding key to [ssh-add] setup and store it at Bitwarden for safekeeping
 
 **All keys are autosave to: C:/Users/{user}/.ssh folder**
 
 ## Set up [sshd] service
 
-### Set the sshd service to start automatically
+#### Set the sshd service to start automatically
 
 Open PowerShell as **Administrator** and enter:
 
@@ -78,143 +77,149 @@ Open PowerShell as **Administrator** and enter:
 Get-Service -Name sshd | Set-Service -StartupType Automatic
 ```
 
-### Start the sshd service
+#### Start the sshd service
 ```
 Start-Service sshd
 ```
 
-![image](https://github.com/user-attachments/assets/79870ac2-8e97-4848-bcb6-08482c38d409)
+![image](https://drive.google.com/uc?export=view&id=136DHsa25Js9P4rv4stwiRw_76d1khBZR)
 
 ## Setup [ssh-agent]
 
-This setup and configuration for Windows is for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account and to start the [ssh-agent] service each time the computer is rebooted (to start automatically). By default the [ssh-agent] service is diabled
++ This setup and configuration for Windows is for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account
++ And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
++ By default the [ssh-agent] service is diabled
 
 **Run Powershell as Administrator**
 
-### Get ssh-agent to start automatically
+#### Get ssh-agent to start automatically
 ```
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
 
-### Start the service: 
+#### Start the service: 
 ```
 Start-Service ssh-agent
 ```
 
-### This should return a status of Running
+#### This should return a status of Running
 ```
 Get-Service ssh-agent
 ```
 
-### Load private key onto [ssh-agent]:
+#### Load private key onto [ssh-agent]:
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 ```
-![image](https://github.com/user-attachments/assets/f721df40-b4e5-45c4-aea1-d96d5b2dd54c)
+![image](https://drive.google.com/uc?export=view&id=138QwWijpZyN3PJkwXnm6ERj2uRiX5L6i)
 
 > [!NOTE]
-> The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
-> If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.\
-> Then standby to add those public keys onto the server when ready.
+> + The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.
+> + If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.
+> + Then standby to add those public keys onto the server when ready.
 
+<p></p>
 
 ## Initiate & Deployment of Server
 
-### Password-less SSH
-For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
-If not, deploy with root password.\
-If add an SSH key, no root credentials will be sent via email
+#### Password-less SSH
++ For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.
++ If not, deploy with root password.
++ If add an SSH key, no root credentials will be sent via email.
 
-![image](https://github.com/user-attachments/assets/9aac8630-a18d-4b5f-932b-6724952b721c)
+#### In Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key"
 
-**After adding own public SSH keys in:**
-![image](https://github.com/user-attachments/assets/a2b8c4fa-4e3e-4737-bcd7-492544ed8143)
+![image](https://drive.google.com/uc?export=view&id=13DVacST8KJNqqWrJv9beCkuZdujufuAu)
 
-**When creating server, can now have options to auto push the public keys in for a password-less entry.**
-![image](https://github.com/user-attachments/assets/afd771ab-b713-429d-b90c-8f7ad61e7749)
+#### After adding the just-created public key:
 
-### Server created!
+![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
-![image](https://github.com/user-attachments/assets/d2d0cf40-d284-4901-8fdc-4eb1b78052ab)
-**Hostname: dosvr1**
+#### When creating server, can now have option to add the public key for a password-less entry
 
-## Create config file for Powershell/Windows as client
+![image](https://drive.google.com/uc?export=view&id=13FmLD46ZIauh1qt87cei8jwHP0o8Fm0i)
 
-Since we rename the keys to some other name than the default names (id_rsa etc..), additional steps for Windows .ssh agent / client to SSH into the server:
+## Server created!
 
-### Config file for User in Windows
+![image](https://drive.google.com/uc?export=view&id=13HNaW5E5zAfEmNmQ7GQlvGcHa_ix781y)
 
-Run Powershell as **Administrator**
+## SSH Config file for User in Windows
+
+We did rename the key to some other name than the default names (id_rsa etc..), so, useful to add some config info for Windows:
+
+#### Create new Config file for User
+
+Run Powershell as **Administrator** and navigate to .ssh folder and create the file.
 
 ```
 cd C:/Users/{user}/.ssh
 ```
-
-### Create config file (example if have VSCode installed)
-
 ```
 code config
 ```
-
 or 
-
 ```
 New-Item config
 ```
 
-### Specifying Identityfile for SSH:
+### Specifying Identityfile for Windows/Client SSH side of things:
 
-Can replace Host (which is an alias, sort of shortcut name) to anything\
-Hostname is usually IP address or domain\
-IdentityFile is the path to the private keys\
-Can open the config file using Notepad from Windows Explorer\
-
-### Add the following configs to the config file:
+Add the following to the config file:
 ```
-# Per-Host Per User basis config
-# this is for root access
-Host dosvr1-root # to remove when set up with sudo user is okay
-    Hostname {VPS IP Address} 
-    User root
-    Identityfile C:/Users/{user}/.ssh/root-key
-    IdentitiesOnly yes
-
 # this is main user access
-Host dosvr1-admin
-    Hostname {VPS IP Address} 
-    User user
-    Identityfile C:/Users/{user}/.ssh/admin-key
-    IdentitiesOnly yes
+Host dosvr1
+    Hostname {IP address}
+    Identityfile C:/Users/{user}/.ssh/sfarhan-key
 ```
+
+> [!Note]
+> + Can replace Host (which is an alias, sort of shortcut name) to anything
+> + Hostname is usually IP address or domain
+> + IdentityFile is the path to the private keys
+> + Can also open and edit the config file using Notepad from Windows Explorer
+> + To use same config file and configure change of SSH port
+
 Save file and Exit terminal
 
 ## SSH into the server via root access:
 
-From Powershell:\
+From Powershell:
 ```
-ssh dosvr1-root
-```
-
-Or
-
-```
-ssh root@{VPS IP address} -i ~/.ssh/root-key
+ssh root@dosvr1
 ```
 
-![image](https://github.com/user-attachments/assets/0a1de47f-73d0-4156-9565-76c062204c75)
+![image](https://drive.google.com/uc?export=view&id=13JILgMEERSxFgLuyzCLfT7G5-ENkd7Bb)
 
-VPS Server is up and running with root SSH access and ease of entry from Desktop PC.
+**:+1: VPS Server is up and running with root SSH access and for easy and secured entry from Desktop PC.**
 
 ## Initial Housekeeping
 
 ```
-apt update && apt -y upgrade && apt -y install curl wget
+apt update && apt upgrade
 ```
 ```
 apt-get autoremove && apt-get autoclean
 ```
-Reboot the server
+### Change server hostname
+Realised that my original input for a hostname when spinning up the server was actually quite long (...@do-clp-wp-svr1) :)
+Decided to change it to something shorter
+```
+hostnamectl set-hostname dosvr1
+```
+
+### Double check and verify change takes effect
+
+```
+hostname
+```
+and
+```
+cat /etc/hostname
+```
+![image](https://drive.google.com/uc?export=view&id=13rhitH7hncm1_IN5HsVkCYgL2ayuKAOJ)
+
+### Reboot the server (and log back in to continue)
 ```
 shutdown -r now
 ```
@@ -238,18 +243,25 @@ or can remove it completely:
 ```
 apt remove unattended-upgrades
 ```
-### Check SSH authorizedkeys file and the 2 public keys are in the /root/.ssh folder
-If not:
+### Check SSH authorized_keys file
+Ensure that the 2 public keys are in the /root/.ssh folder
+
+![image](https://drive.google.com/uc?export=view&id=13wlVDx-7IzAv9cODGNNyDyUf-m2X9VGV)
+
+If not..
+
 ### Create folders for .ssh and a file for authorized_keys:
 ```
 cd /root
 mkdir .ssh
 cd .ssh
-code authorized_keys
+nano authorized_keys
 ```
-Then put the relevant public keys in here. If already have the public keys for Tablet/Phone devices entry points, can add them in now.
 
-### Make the directory and file only executable by the root and setup ownership and permissions:
+Then put the relevant public keys in here.\
+If need to add additional public keys (eg: for Laptop/Tablet/Phone devices entry points), can add them in now.
+
+### Setup ownership and permissions:
 ```
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
@@ -264,9 +276,9 @@ $ service ssh restart
 systemctl restart sshd
 ```
 
-_Note:
-All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files, so if need root specific public keys, need a seperate authorized_keys file in /root/.ssh/ and 
-in /home/yournameuser/.ssh/_
+> [!Note]
+> All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a seperate authorized_keys file in /root/.ssh/ and for
+in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
 
 ## Create new user
 
@@ -277,35 +289,38 @@ adduser user
 usermod -aG sudo user
 usermod -aG adm user
 ```
-Password: xxxxx
-
-### Create the folder if it doesn't already exist:
+### Create the .ssh folder for new sudo user if it doesn't already exist:
 ```
-mkdir /home/$USER/.ssh
+mkdir /home/{user}/.ssh
 ```
 ### Copy the authorized_keys file that contains the public keys:
 ```
-cp /root/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys
+cp /root/.ssh/authorized_keys /home/{user}/.ssh/authorized_keys
 ```
 ### Setup ownership and permissions:
 ```
-chown -R $USER:$USER /home/$USER/.ssh
-chmod 700 /home/$USER/.ssh
-chmod 600 /home/$USER/.ssh/authorized_keys
+chown -R {user}:{user} /home/{user}/.ssh
+chmod 700 /home/{user}/.ssh
+chmod 600 /home/{user}/.ssh/authorized_keys
 ```
+**Now the new sudo user has the public keys safely in their own authorized_keys file to SSH in next**
+
+![image](https://drive.google.com/uc?export=view&id=13xGpj9uI-0o02swOXNLHBgflWjBRwEOw)
+
 ### Restart ssh
 ```
 service ssh restart
 ```
-** Before logging out root account, ssh via new user**
 
 ## SSH in via sudo user
 Open new Powershell terminal
 ```
-ssh dosvr1-user
+ssh sfarhan@dosvr1
 ```
 _Note:
-The "dosvr1-user" is what we defined in the config file above_
+The "dosvr1" is what we defined in the Windows side of things /.ssh config file above_
+
+![image](https://github.com/user-attachments/assets/6264efc1-fa13-4894-a038-21a3a0df0742)
 
 ############################################################################
 
