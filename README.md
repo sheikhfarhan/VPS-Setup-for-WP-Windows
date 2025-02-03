@@ -30,18 +30,16 @@ VLE-4: ~ SGD 16/mth : 4 vCPU | 4 GB Ram | 40 GB
 For this test deployment, using Digital Ocean, since have $200 free referral credits to use up within the next 60 days :)\
 Get your free $200 credit here: https://m.do.co/c/97213212086d
 
-## SSH Keys
+## SSH Keys Setup
 
-**Generate 1 private+public key** (can use Putty, CLI via Windows Powershell or Termius)\
-1 x user use-case (me)\
-sfarhan-key
+Main workstation: Windows 11 PC\
+Terminal: Powershell 7.x\
+1 x User use case (me)
 
 ### Generating Keys via PowerShell (can use Termius app, Putty etc..)
 
-**Using Powershell 7.x in Windows 11 as main client:**
-
 Install Powershell 7.x from Windows Store\
-Open up PowerShell\
+Start PowerShell as user\
 Generate SSH keys:
 
 ```
@@ -68,6 +66,8 @@ ls
 
 _(when all is okay and after adding key to [ssh-add], can remove the private keys from local directory and store it at Bitwarden for safekeeping!)_
 
+## Set up [sshd] service
+
 ### Set the sshd service to start automatically
 
 Open PowerShell as **Administrator** and enter:
@@ -83,9 +83,9 @@ Start-Service sshd
 
 ![image](https://github.com/user-attachments/assets/79870ac2-8e97-4848-bcb6-08482c38d409)
 
-### Setup [ssh-agent]:
+## Setup [ssh-agent]
 
-Setup [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account + To start the [ssh-agent] service each time the computer is rebooted + Using [ssh-add] to store the private key (By default the [ssh-agent] service is disabled) + To configure it to start automatically.
+This setup and configuration for Windows is for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account and to start the [ssh-agent] service each time the computer is rebooted (to start automatically). By default the [ssh-agent] service is diabled
 
 **Run Powershell as Administrator**
 
@@ -104,11 +104,7 @@ Start-Service ssh-agent
 Get-Service ssh-agent
 ```
 
-Exit Terminal
-
 ### Load private key onto [ssh-agent]:
-
-Start new Terminal (usual, without Administrator): 
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
@@ -205,6 +201,8 @@ ssh root@{VPS IP address} -i ~/.ssh/root-key
 ```
 
 ![image](https://github.com/user-attachments/assets/0a1de47f-73d0-4156-9565-76c062204c75)
+
+VPS Server is up and running with root SSH access and ease of entry from Desktop PC.
 
 ## Initial Housekeeping
 
