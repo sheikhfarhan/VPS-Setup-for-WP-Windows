@@ -106,7 +106,12 @@ Start-Service ssh-agent
 Get-Service ssh-agent
 ```
 
+Exit Terminal\
+
 ### Load key files into [ssh-agent]:
+
+Start new Terminal (usual, without Administrator): 
+
 ```
 ssh-add $env:USERPROFILE\.ssh\root-key
 ssh-add $env:USERPROFILE\.ssh\admin-key
