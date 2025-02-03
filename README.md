@@ -6,7 +6,7 @@ Date: 30 Jan 2025
 
 
 
-## VPS (Virtual Private Server)
+## Select a VPS (Virtual Private Server) Provider
 
 Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
@@ -34,13 +34,16 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d
 
 Main workstation: Windows 11 PC\
 Terminal: Powershell 7.x\
-1 x User use case (me)
+1 x Admin/User use-case (me)
 
-### Generating Keys via PowerShell (can use Termius app, Putty etc..)
+## Install Powershell 7.5 / 7.x
 
 Install Powershell 7.x from Windows Store\
-Start PowerShell as user\
-Generate SSH keys:
+Other methods of installation and guide here:\
+https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5 \
+Start PowerShell as user
+
+## Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
@@ -61,10 +64,9 @@ ls
 > Can add any nickname/comment after -C\
 > eg: -C homepc\
 > -C "" will not have any comments in the keys
+> Can remove the private keys from local directory after adding key to [ssh=add] setup and store it at Bitwarden for safekeeping
 
 **All keys are autosave to: C:/Users/{user}/.ssh folder**
-
-_(when all is okay and after adding key to [ssh-add], can remove the private keys from local directory and store it at Bitwarden for safekeeping!)_
 
 ## Set up [sshd] service
 
@@ -120,13 +122,13 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 ## Initiate & Deployment of Server
 
 ### Password-less SSH
-For DO, Hetzner or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
+For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
 If not, deploy with root password.\
 If add an SSH key, no root credentials will be sent via email
 
 ![image](https://github.com/user-attachments/assets/9aac8630-a18d-4b5f-932b-6724952b721c)
 
-**After adding your own public SSH keys in:**
+**After adding own public SSH keys in:**
 ![image](https://github.com/user-attachments/assets/a2b8c4fa-4e3e-4737-bcd7-492544ed8143)
 
 **When creating server, can now have options to auto push the public keys in for a password-less entry.**
