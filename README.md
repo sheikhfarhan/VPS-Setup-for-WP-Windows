@@ -8,7 +8,7 @@ Date: 30 Jan 2025
 
 ## VPS (Virtual Private Server)
 
-Options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
+Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
 **Digital Ocean:**\
 ~ SGD 11/mth: 1 vCPU | 1GB Ram | 35 GB NVMe SSD\
@@ -32,11 +32,11 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d
 
 ## SSH Keys
 
-Generate 2 sets of private+public keys (can use Putty, CLI via Windows Powershell or Termius):\
-root-key\
-own/user-key
+**Generate 1 private+public key** (can use Putty, CLI via Windows Powershell or Termius)\
+1 x user use-case (me)\
+sfarhan-key
 
-### Generate Keys via PowerShell or Termius app or Putty
+### Generating Keys via PowerShell (can use Termius app, Putty etc..)
 
 **Using Powershell 7.x in Windows 11 as main client:**
 
@@ -45,30 +45,28 @@ Open up PowerShell\
 Generate SSH keys:
 
 ```
-ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/root-key -C ""
-```
-Passphrase: xxxxxx
-
-```
-ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/admin-key -C ""
+ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 ```
 Passphrase: xxxxxx
 
 ![image](https://github.com/user-attachments/assets/71c7312e-02ab-4c53-af17-3d94abe3176b)
 
-### Check ~/.ssh folder
+### Check Windows User ~/.ssh folder
+
+```
+ls
+```
 
 ![image](https://github.com/user-attachments/assets/f6224d3c-96a7-47e2-86d4-f6484a6f3c80)
 
-_Note:
-Can add any nickname/comment after -C\
-eg: -C homepc\
--C "" will not have any comments in the keys_
-\
-\
-All keys are autosave to: C:/user/$User/.ssh**
+> [!NOTE]
+> Can add any nickname/comment after -C\
+> eg: -C homepc\
+> -C "" will not have any comments in the keys
 
-_(when all is okay, can consider to remove the private keys from local PC and store it at Bitwarden for safekeeping!)_
+**All keys are autosave to: C:/Users/{user}/.ssh folder**
+
+_(when all is okay and after adding key to [ssh-add], can remove the private keys from local directory and store it at Bitwarden for safekeeping!)_
 
 ### Set the sshd service to start automatically
 
@@ -106,35 +104,36 @@ Start-Service ssh-agent
 Get-Service ssh-agent
 ```
 
-Exit Terminal\
+Exit Terminal
 
-### Load key files into [ssh-agent]:
+### Load private key onto [ssh-agent]:
 
 Start new Terminal (usual, without Administrator): 
 
 ```
-ssh-add $env:USERPROFILE\.ssh\root-key
-ssh-add $env:USERPROFILE\.ssh\admin-key
+ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 ```
 ![image](https://github.com/user-attachments/assets/f721df40-b4e5-45c4-aea1-d96d5b2dd54c)
 
-The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
-Create new set of keys for each devices (Tablet, Phone) to SSH in.\
-Then standby to add those public keys onto the server when ready.
+> [!NOTE]
+> The ssh-agent in Windows will now automatically retrieve the local private key and pass it to SSH client.\
+> If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.\
+> Then standby to add those public keys onto the server when ready.
+
 
 ## Initiate & Deployment of Server
 
+### Password-less SSH
 For DO, Hetzner or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.\
-If not, deploy with root password.
+If not, deploy with root password.\
+If add an SSH key, no root credentials will be sent via email
 
 ![image](https://github.com/user-attachments/assets/9aac8630-a18d-4b5f-932b-6724952b721c)
 
-After adding your own public SSH keys in
-
+**After adding your own public SSH keys in:**
 ![image](https://github.com/user-attachments/assets/a2b8c4fa-4e3e-4737-bcd7-492544ed8143)
 
-When creating server, can have options to auto push the public keys in for a password-less entry.
-
+**When creating server, can now have options to auto push the public keys in for a password-less entry.**
 ![image](https://github.com/user-attachments/assets/afd771ab-b713-429d-b90c-8f7ad61e7749)
 
 ### Server created!
