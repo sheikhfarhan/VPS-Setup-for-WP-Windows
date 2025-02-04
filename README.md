@@ -12,7 +12,8 @@ These steps/guides are with the below stacks/environments:
 + Terminal: Powershell 7.x
 + 1 x Admin/User (me)
 + 1 x main SSH key (mine)
-+ VPS with Ubuntu 24.04 OS - 2vCore and 2GB Ram
++ VPS - 2vCore and 2GB Ram
++ Ubuntu 24.04 OS 
 + DNS management via Cloudflare (+ Origin Certificates issuance)
 + Cloudpanel as the control panel under reverse proxy (to achieve clp.domain.com as my panel's login)
 + Cloudpanel default stack is LEMP (Nginx)
@@ -155,7 +156,7 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 ## Server created!
 
-![image](https://drive.google.com/uc?export=view&id=13HNaW5E5zAfEmNmQ7GQlvGcHa_ix781y)
+![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
 ## SSH Config file in Windows
 
@@ -181,10 +182,12 @@ New-Item config
 Add the following to the config file:
 ```
 # this is main user access
-Host dosvr1
+Host dosvr2
     Hostname {IP address}
     Identityfile C:/Users/{user}/.ssh/sfarhan-key
 ```
+
+![image](https://drive.google.com/uc?export=view&id=154olKi795BjFPCaSBd_5mFFkVV7GHUbw)
 
 > [!Note]
 > + Can replace Host (which is an alias, sort of shortcut name) to anything
@@ -222,34 +225,18 @@ User root
 
 From Powershell:
 ```
-ssh root@dosvr1
+ssh root@dosvr2
 ```
 
-![image](https://drive.google.com/uc?export=view&id=13JILgMEERSxFgLuyzCLfT7G5-ENkd7Bb)
+![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
 
 ## Initial Housekeeping
 ```
 apt update && apt upgrade
 ```
 ```
-apt-get autoremove && apt-get autoclean
+apt autoremove && apt autoclean
 ```
-### Change server hostname
-Realised that my original input for a hostname when spinning up the server was actually quite long (...@do-clp-wp-svr1) :)
-Decided to change it to something shorter
-```
-hostnamectl set-hostname dosvr1
-```
-
-### Verify change takes effect
-```
-hostname
-```
-and
-```
-cat /etc/hostname
-```
-![image](https://drive.google.com/uc?export=view&id=13rhitH7hncm1_IN5HsVkCYgL2ayuKAOJ)
 
 ### Reboot server (and log back in to continue)
 ```
@@ -279,7 +266,7 @@ apt remove unattended-upgrades
 
 Ensure that the 2 public keys are in the /root/.ssh folder
 
-![image](https://drive.google.com/uc?export=view&id=13wlVDx-7IzAv9cODGNNyDyUf-m2X9VGV)
+![image](https://drive.google.com/uc?export=view&id=15H0ge-Mx3cqClT7ZhAX6QAVMIy34sVg3)
 
 If not..
 
@@ -302,26 +289,26 @@ chown -R root:root ~/.ssh
 ```
 ### Restart SSH service
 ```
-$ service ssh restart
+systemctl restart ssh
 ```
+
 ### Restart the sshd daemon, still as root, with:
 ```
-systemctl restart sshd
+systemctl restart ssh.service
 ```
 
 > [!Note]
-> All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a seperate authorized_keys file in /root/.ssh/ and for
-in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
+> All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a separate authorized_keys file in /root/.ssh/ and for in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
 
 ## Create New user
 
 ### Create sudo user
 ```
-adduser user
-usermod -aG sudo user
-usermod -aG adm user
+adduser <user>
+usermod -aG sudo <user>
 ```
-### Create the .ssh folder for new sudo user if it doesn't already exist:
+
+### Create the .ssh folder for new sudo user:
 ```
 mkdir /home/{user}/.ssh
 ```
@@ -338,11 +325,12 @@ chmod 600 /home/{user}/.ssh/authorized_keys
 ```
 **Now the new sudo user has the public keys safely in their own authorized_keys file**
 
-![image](https://drive.google.com/uc?export=view&id=13xGpj9uI-0o02swOXNLHBgflWjBRwEOw)
+![image](https://github.com/user-attachments/assets/9ec2bf30-49e7-4eb0-b44f-3091e04b2027)
 
 ### Restart ssh
 ```
-service ssh restart
+systemctl restart ssh
+systemctl restart ssh.service
 ```
 
 ## SSH in via sudo user
@@ -352,9 +340,9 @@ Open new Powershell terminal
 ssh sfarhan@dosvr1
 ```
 _Note:
-The "dosvr1" is what we defined in the Windows side of things /.ssh config file above_
+The "dosvr2" is what we defined in the Windows side of things /.ssh config file above_
 
-![image](https://drive.google.com/uc?export=view&id=14iyqnQSlsUL_ntbHu26chEN50E_InBsS)
+![image](https://drive.google.com/uc?export=view&id=15MF9ssfpgB-gYTX1bmrJ2_w4Ce8PWsGJ)
 
 > [!NOTE]
 > Test a few sudo commands to ensure all is okay, then next step is to disable root login and securing SSH access
@@ -385,13 +373,10 @@ PasswordAuthentication no
 ```
 Save And Close file
 
-![image](https://drive.google.com/uc?export=view&id=13xYX1Bs7nN60k7KXGdkeOusZ5856JSr0)
-
 #### Restart Services for changes to take effect
 ```
-sudo service ssh restart
+sudo systemctl restart ssh
 ```
-
 To activate this new config, it is now required **to inform systemd about the change**:
 ```
 sudo systemctl daemon-reload
@@ -408,10 +393,10 @@ sudo systemctl restart ssh.service
 sudo ss -tulm
 ```
 
-![image](https://drive.google.com/uc?export=view&id=14NSyZQyXe-M-xO3stw3ZYDTdHscpAmAO)
+![image](https://drive.google.com/uc?export=view&id=15MF9ssfpgB-gYTX1bmrJ2_w4Ce8PWsGJ)
 
 > [!IMPORTANT]
-> Before logging off, need to allow the new port in UFW (Firewall) settings and the new port info in Windows SSH config file\
+> Before logging off, need to allow the new port in UFW (Firewall) settings and add new port info in Windows SSH config file\
 > Do not close the existing session! and continue next steps
 
 ## Add Rules in UFW
@@ -453,25 +438,24 @@ sudo ufw logging off # or sudo vim /etc/ufw/ufw.conf (LOGLEVEL=off).
 sudo UFW status
 ```
 
-![image](https://drive.google.com/uc?export=view&id=14OSSWfk8hUgBZHAxiLIvyMjMM8cYwTCr)
+![image](https://drive.google.com/uc?export=view&id=15Pr2cAXvCvapTLV1lVLg7_E9GrVEX9L4)
 
 > [!NOTE]
-> To remove port 22/tcp only AFTER Cloudpanel is installed and all okay
-> If remove now, it is okay too - will need to add the port info during Clkoudpanel's installation process
+> Will need to add the port info during Cloudpanel's installation process, as its default port is 22
 
 ### Add new SSH port in Window's SSH config file:
 
 Open the config file via Notepad and add the port info. File is at C:/Users/{user}/.ssh/config
 ```
 # this is main user access
-Host dosvr1
+Host dosvr2
     Hostname {IP address}
     Port 22022 # <-this
     Identityfile C:/Users/{user}/.ssh/sfarhan-key
 ```
 Save file
 
-![image](https://drive.google.com/uc?export=view&id=14UaRze5B61AIdJxUpguwN5F7vNbG0-8u)
+![image](https://drive.google.com/uc?export=view&id=15QSeFs6a3gpFChrYGq39zhXNF8uKZgfV)
 
 > [!IMPORTANT]
 > Before logging off, Start a new terminal to SSH in to test
@@ -480,8 +464,7 @@ Save file
 
 Log in into server as usual without need to specify port info:
 
-![image](https://drive.google.com/uc?export=view&id=14_Ynv7j58iKbYHoFF4JEtC5kx53g8pKg)
-
+![image](https://drive.google.com/uc?export=view&id=15RGq_uH_yiBnISAQmnYGUTnaFtz-9Vjj)
 
 #################### #####################
 
@@ -495,15 +478,15 @@ sudo apt-get install fail2ban -y
 
 #### Check Fail2ban status
 ```
-/etc/init.d/fail2ban status
+sudo /etc/init.d/fail2ban status
 ```
 
-![image](https://drive.google.com/uc?export=view&id=14kueQmp2Z4iHupxrL79RgFbB0etXSxR_)
+![image](https://drive.google.com/uc?export=view&id=15RRASwdVI7NcwkFTTUT34pRiXfYjDKP5)
 
 #### Create new jail.local
 
 > [!NOTE]
-> Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problem when upgrading.
+> Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problems when upgrading.
 
 #### Create new jail.local file
 ```
@@ -531,6 +514,12 @@ maxretry = 3
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=14pDUHgIp9L7Fkuzqk4ZsNyhlU7jwHrh_)
+
+#### Restart Fail2ban
+```
+sudo systemctl restart fail2ban
+sudo service fail2ban restart
+```
 
 #### Add these below after install WP Fail2ban plugin
 ```
@@ -564,20 +553,13 @@ port = http,https
 ```
 sudo apt install python3-systemd
 ```
-
 And add:
 backend=systemd under [sshd] in the jail.local file
 
-#### Restart Fail2ban
-```
-sudo systemctl restart fail2ban
-sudo service fail2ban restart
-```
-
 #### Check the new rules by:
 ```
-iptables -S
-iptables -L
+sudo iptables -S
+sudo iptables -L
 ```
 
 #### To check bans
@@ -605,22 +587,25 @@ Go to Domain Registrar and add Cloudflare's given nameservers in:
 
 ![image](https://drive.google.com/uc?export=view&id=14pLjdHOKozSED2eVMWjopYNb69k1Bm9b)
 
+#### Adding A & CNAME records for main domain & for CloudPanel log-in page
 
+![image](https://drive.google.com/uc?export=view&id=153-rR06znAnvLD67EgRvgoNM1MkaSM2w)
 
+> [!NOTE]
+> CloudPanel's log-in page will be clp.domain.com\
+> Do not proxy it through Cloudflare yet!
 
+#### Switch to Full (Strict) mode
 
+SSL/TLS -> Overview -> Configure
 
+#### Create CF Certificate
 
+SSL/TLS -> Origin Server -> Create
 
+![image](https://drive.google.com/uc?export=view&id=151xiP1wt7WIU5KUP-9MVJPDYzMtG4556)
 
-
-
-
-
-
-
-
-
+Copy the two sets of keys somewhere. We will need them later. Once copied, click OK.
 
 ## Installing a Control Panel
 
@@ -639,67 +624,48 @@ curl -sS https://installer.cloudpanel.io/ce/v2/install.sh -o install.sh && sudo 
 apt-get autoremove && apt-get autoclean
 ```
 
+#### Log-in to Cloudpanel via:
 https://yourIpAddress:8443
 
-Create new Firewall Rule in Cloudpanel
-Add:
-Custom SSH port: 22022
-For ip4: 0.0.0.0/0
-For ip6: ::/0
+#### Firewall in Cloudpanel
+Admin Area -> Security
+Add: Custom SSH Port - 22022 - ip4: 0.0.0.0/0
+Add: Custom SSH Port - 22022 - ip6: ::/0
 
-Delete Port 22
+![image](https://drive.google.com/uc?export=view&id=15j10ttzLrtfN5MSTBo9v07Ef8ifXgVAJ)
 
-Add FTP for Port 20-21
+#### Delete SSH Port 22 and summary as follows:
 
-sudo systemctl restart fail2ban
+![image](https://drive.google.com/uc?export=view&id=15lBNoFNR8ThESjKIQs5z2-5eaWh4kPNZ)
 
-Cloudflare
+#### Setting up subdomain for Cloudpanel's log-in page
 
-Add Records for:
++ Go to Sites and Create a Reverse Proxy 
++ Enter the Domain Name as clp.domain.com, enter https://127.0.0.1:8443 as Reverse Proxy Url.
++ Make sure the https is the url
++ User: reverseproxy (this is just to contain the /home docs)
++ Once created, go to Manage -> SSL -> and import Cloudflare Origin Certificate for clp.domain.com (to log into the panel)
++ The Cloudflare Origin Certificate was from the previous step
 
-domain.com
-{IP Address}
-Proxied
+![image](https://drive.google.com/uc?export=view&id=15RRASwdVI7NcwkFTTUT34pRiXfYjDKP5)
 
-clp
-{IP Address}
-Turn Off Proxy First
+Go back to Cloudflare DNS page and enable Proxy for the clp.domain.com A record
 
-CNAME
-www
-domain.com
-Proxied
+https://clp.domain.com will now bring to CloudPanel login page with SSL
 
-Setting up subdomain for Cloudpanel
+![image](https://drive.google.com/uc?export=view&id=15wstwfoOh_CWaUqsgSXjxH2U_T1h_n7B)
 
-To upload Cloudflare Origin Certificate for clp.amnotadev.com (to log into the panel), do a CloudPanel Custom Domain via Reverse Proxy
+#### Add site
 
-Go to Sites and create a Reverse Proxy
-
-Enter the Domain Name as clp.domain.com, enter https://127.0.0.1:8443 as Reverse Proxy Url.
-
-Make sure the https is the url
-
-User: reverseproxy (this is just to contain the /home docs)
-Password: xxxxxxx
-
-Do not close CF origin cert page yet, we need the keys to copy paste into Cloudpanel
-
-Import CF origin certificate
-
-https://clp.domain.com will bring to CloudPanel login page
-
-If after installing Cloudpanel, fail2ban fails..
-
+If after installing Cloudpanel, fail2ban fails
 Here is a workaround:
 wget https://launchpad.net/ubuntu/+source/fail2ban/1.1.0-1/+build/28291332/+files/fail2ban_1.1.0-1_all.deb
 sudo dpkg -i fail2ban_1.1.0-1_all.deb
 https://bugs.launchpad.net/ubuntu/+source/fail2ban/+bug/2055114/comments/22
 https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04
 
-Server Security & Server Panel DONE!
-
-TIME TO INSTALL WORDPRESS!!
+## **:+1: Server is hardened and Web Control Panel is ready**
+## TIME TO INSTALL WORDPRESS!
 
 Install /Run Wordpress on test.domain.com
 
