@@ -351,7 +351,7 @@ ssh sfarhan@dosvr1
 _Note:
 The "dosvr1" is what we defined in the Windows side of things /.ssh config file above_
 
-![image](https://github.com/user-attachments/assets/6264efc1-fa13-4894-a038-21a3a0df0742)
+![image](https://drive.google.com/uc?export=view&id=14_gjzMKbAiTfsX5MaWx8rK9E17Kp8og)
 
 > [!NOTE]
 > Test a few sudo commands to ensure all is okay, then next step is to disable root login and securing SSH access
@@ -380,21 +380,21 @@ PermitRootLogin no
 PubkeyAuthentication yes
 PasswordAuthentication no
 ```
+Save And Close file
+
+![image](https://drive.google.com/uc?export=view&id=13xYX1Bs7nN60k7KXGdkeOusZ5856JSr0)
+
+#### Restart Services for changes to take effect
 ```
 sudo service ssh restart
 ```
-
->[!NOTE]
-> In Ubuntu 24.04, behavior is slightly different than what I am used to for changing of SSH port ie: change /etc/ssh/sshd_config file to indicate a new port #, then restart the service. There are additional steps in Ubuntu 24.04 it seems.
-> If not changing the port, can skip some of the steps below
-
-#### Activate new config (for the SSH port part)
 
 To activate this new config, it is now required **to inform systemd about the change**:
 ```
 sudo systemctl daemon-reload
 ```
-Then the ssh service and socket can be restarted, to **activate the change**:
+
+### ssh service and socket can be restarted, to **activate the change**:
 ```
 sudo systemctl restart ssh.socket
 sudo systemctl restart ssh.service
@@ -402,14 +402,16 @@ sudo systemctl restart ssh.service
 
 #### Verify new SSH port number is listening:
 ```
-sudo netstat -tuln | grep :22022
+sudo ss -tulm
 ```
 
+![image](https://drive.google.com/uc?export=view&id=14NSyZQyXe-M-xO3stw3ZYDTdHscpAmAO)
+
 > [!IMPORTANT]
-> Before logging off, need to setup new port in UFW (Firewall) settings and add new SSH port in Windows SSH config file
+> Before logging off, need to setup new port in UFW (Firewall) settings and the new port info in Windows SSH config file\
 > Do not close the existing session! and continue next steps
 
-### Add Rules in UFW
+## Add Rules in UFW
 
 #### Start UFW
 
@@ -418,6 +420,7 @@ UFW is already pre-installed with Ubuntu 24.04 but disabled.
 ```
 sudo ufw enable
 ```
+_can proceed if system ask to_
 
 #### Check UFW is running
 ```
@@ -433,7 +436,6 @@ sudo ufw default deny incoming
 #### Allow new SSH port
 ```
 sudo ufw allow 22022/tcp
-sudo ufw allow out 22022/tcp
 ```
 
 #### Add other basic rules for UFW
@@ -448,7 +450,7 @@ sudo ufw logging off # or sudo vim /etc/ufw/ufw.conf (LOGLEVEL=off).
 sudo UFW status
 ```
 
-INSERT IMAGE HERE!
+![image](https://drive.google.com/uc?export=view&id=14OSSWfk8hUgBZHAxiLIvyMjMM8cYwTCr)
 
 > [!NOTE]
 > To remove port 22/tcp only AFTER Cloudpanel is installed and all okay!
@@ -466,12 +468,19 @@ Host dosvr1
 ```
 Save file
 
+![image](https://drive.google.com/uc?export=view&id=14UaRze5B61AIdJxUpguwN5F7vNbG0-8u)
+
 > [!IMPORTANT]
 > Before logging off, Start a new terminal to SSH in to test
 
 #### Open new terminal (without closing the current session)
 
 Log in into server as usual without need to specify port info:
+
+![image](https://drive.google.com/uc?export=view&id=14_Ynv7j58iKbYHoFF4JEtC5kx53g8pKg)
+
+
+#################### #####################
 
 ## Fail2ban
 
