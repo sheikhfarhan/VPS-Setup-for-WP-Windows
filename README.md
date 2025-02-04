@@ -2,17 +2,23 @@
 Version: 1.1\
 Date: 30 Jan 2025
 
-I have been deploying many VPSs for varied use-cases for past years and thought it was time to document the steps I use for my own reference. The idea is to spin up a basic VPS up, layer some security and allow me easy access to the server from my PC (Windows 11) and other devices I own. For this project, I want to set up a Wordpress website using a free control panel. Been using Cloudpanel and Cloudflare with no issues for the past year, am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+I have been deploying many VPSs for varied use-cases for past years and thought it was time to document the steps I use for my own reference. The idea is to spin up a VPS, layer some security, and allow me easy access to the server from my Home PC (Windows 11) and other devices I own.
 
-+ Main workstation: Windows 11 PC
+For this project, I want to set up a Wordpress website using a free control panel. Been using Cloudpanel and Cloudflare with no issues for couple of years already, am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+
+These steps/guides are with the below stacks/environments:
+
++ Workstation/Client: Windows 11 PC
 + Terminal: Powershell 7.x
-+ 1 x Admin/User use-case (me)
++ 1 x Admin/User (me)
 + 1 x main SSH key (mine)
-+ VPS (harderned)
++ VPS with Ubuntu 24.04 OS - 2vCore and 2GB Ram
 + DNS management via Cloudflare (+ Origin Certificates issuance)
 + Cloudpanel as the control panel under reverse proxy (to achieve clp.domain.com as my panel's login)
 + Cloudpanel default stack is LEMP (Nginx)
-+ Installation of a Wordpress (hardened)
++ Installation of Wordpress (hardened)
+
+Lets go!
 
 ## Select a VPS (Virtual Private Server) Provider
 
@@ -221,10 +227,7 @@ ssh root@dosvr1
 
 ![image](https://drive.google.com/uc?export=view&id=13JILgMEERSxFgLuyzCLfT7G5-ENkd7Bb)
 
-**:+1: VPS is up with root access and for easy and secured entry from Desktop PC.**
-
 ## Initial Housekeeping
-
 ```
 apt update && apt upgrade
 ```
@@ -408,19 +411,19 @@ sudo ss -tulm
 ![image](https://drive.google.com/uc?export=view&id=14NSyZQyXe-M-xO3stw3ZYDTdHscpAmAO)
 
 > [!IMPORTANT]
-> Before logging off, need to setup new port in UFW (Firewall) settings and the new port info in Windows SSH config file\
+> Before logging off, need to allow the new port in UFW (Firewall) settings and the new port info in Windows SSH config file\
 > Do not close the existing session! and continue next steps
 
 ## Add Rules in UFW
 
 #### Start UFW
 
-UFW is already pre-installed with Ubuntu 24.04 but disabled. 
+_UFW is already pre-installed with Ubuntu 24.04 but disabled._
 
 ```
 sudo ufw enable
 ```
-_can proceed if system ask to_
+_can proceed if system asks to_
 
 #### Check UFW is running
 ```
@@ -453,8 +456,8 @@ sudo UFW status
 ![image](https://drive.google.com/uc?export=view&id=14OSSWfk8hUgBZHAxiLIvyMjMM8cYwTCr)
 
 > [!NOTE]
-> To remove port 22/tcp only AFTER Cloudpanel is installed and all okay!
-> If remove now, it is okay too, then will need to add the port info during installation process
+> To remove port 22/tcp only AFTER Cloudpanel is installed and all okay
+> If remove now, it is okay too - will need to add the port info during Clkoudpanel's installation process
 
 ### Add new SSH port in Window's SSH config file:
 
@@ -484,77 +487,53 @@ Log in into server as usual without need to specify port info:
 
 ## Fail2ban
 
-$ sudo ufw default allow outgoing
-$ sudo ufw default deny incoming
+#### Install Fail2ban
+```
+sudo apt-get update
+sudo apt-get install fail2ban -y
+```
 
-sudo ufw allow 22022/tcp
-sudo ufw allow out 22022/tcp
+#### Check Fail2ban status
+```
+/etc/init.d/fail2ban status
+```
 
-Configure UFW
-$ sudo ufw allow http/tcp 
-$ sudo ufw allow https/tcp
-$ sudo ufw allow bootpc/udp
-$ sudo ufw allow ssh/tcp
-$ sudo ufw allow 22022/tcp #this is for new ssh port
-$ sudo ufw logging off or $ sudo vim /etc/ufw/ufw.conf (LOGLEVEL=off).
-$ sudo ufw enable
+![image](https://drive.google.com/uc?export=view&id=14kueQmp2Z4iHupxrL79RgFbB0etXSxR_)
 
-Do this after Install Cloudpanel:
-Deny 22/tcp for SSH:
-$ ufw deny 22/tcp
-(or go to Cloudpanel control panel to delete them)
+#### Create new jail.local
 
-Check: sudo ufw verbose
-Check: sudo ufw status
+> [!NOTE]
+> Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problem when upgrading.
 
-Example Final look to UFW settings:
+#### Create new jail.local file
+```
+sudo touch /etc/fail2ban/jail.local
+```
 
-Create/Test new terminal session with port 22022 (do not exit current session)
-
-Test multiple times. If all okay and after install Cloudpanel:
-
-$ sudo ufw delete allow 22/tcp
-$ sudo ufw delete allow out 22/tcp
-
-#### Change PermitRootlogin config to no:
-$sudo vim /etc/ssh/sshd_config
-
-
-
-
-Fail2ban Install:
-
-$ sudo apt-get update
-$ sudo apt-get install fail2ban -y
-
-Create new jail.local
-
-"Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problem when upgrading. These files are well documented and detailed information should be available there."
-
-Create new jail.local file
-$ sudo touch /etc/fail2ban/jail.local
-
-Edit the file:
-$ sudo nano /etc/fail2ban/jail.local
-clear
-Variables to Change in jail.local:
-
+#### Edit the file:
+```
+sudo nano /etc/fail2ban/jail.local
+```
+Add:
+```
 [DEFAULT]
-
-ignoreip = 127.0.0.1/8 {home or office IP address}
+ignoreip = 127.0.0.1/8
 findtime = 3200
 bantime = 86400
 
 [sshd]
-backend=systemd #this is the workaround for fail2ban not working in Debian
+backend=systemd
 enabled = true
 port = 22022
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
+```
 
-# Add these below after install WP Fail2ban plugin
+![image](https://drive.google.com/uc?export=view&id=14pDUHgIp9L7Fkuzqk4ZsNyhlU7jwHrh_)
 
+#### Add these below after install WP Fail2ban plugin
+```
 [wordpress-hard]
 enabled = true
 filter = wordpress-hard
@@ -575,52 +554,90 @@ filter = wordpress-soft
 logpath = /var/log/auth.log
 maxretry = 3
 port = http,https
+```
 
-To add new jails configs for Wordpress / Mysqp  PHPadmin / Apache / Nginx Bots etc…
-https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
+> [!NOTE]
+> POtentially can new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
+> https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
 
-Run this command:
-$ sudo apt install python3-systemd
+#### Install this if fail2ban jock error shows up:
+```
+sudo apt install python3-systemd
+```
 
-Then:
-$ sudo systemctl restart fail2ban
-$ sudo service fail2ban restart
+And add:
+backend=systemd under [sshd] in the jail.local file
 
-Check the new rules by typing:
-$ iptables -S
-$ iptables -L
+#### Restart Fail2ban
+```
+sudo systemctl restart fail2ban
+sudo service fail2ban restart
+```
 
-$ sudo fail2ban-client status sshd
+#### Check the new rules by:
+```
+iptables -S
+iptables -L
+```
 
-To check the logs:
-$ tail -f /var/log/auth.log
-$ tail -f /var/log/fail2ban.log
+#### To check bans
+```
+sudo fail2ban-client status sshd
+```
 
-For Debian12: to check tail -f auth.log:
-$ sudo journalctl -u ssh.service
+#### Check if loggings are working fine:
+```
+tail -f /var/log/auth.log
+tail -f /var/log/fail2ban.log
+```
 
-manually unban IP addresses 
-sudo fail2ban-client set <jail> banip/unbanip <ip address>
-# For example
-sudo fail2ban-client set sshd unbanip 83.136.253.43
+## **:+1: VPS is ready!**
+### For easy and secured entry from a Windows setup
+### Ready to install applications at will
 
-Check all the open network ports and their associated services
+#############   ################
 
-sudo netstat
-can also use the Nmap command in order to discover hosts and services. 
-nmap domain.com
+## Set Up Cloudflare for DNS Management & Additional Securities
 
-## Installing Control Panel
+#### Point Nameservers to Cloudflare
 
-We have a few choices, Cloudpanel, HestiaCP, Webadmin etc.. Here I am documenting the steps I take for using Cloudpanel for the Wordpress installation
+Go to Domain Registrar and add Cloudflare's given nameservers in:
+
+![image](https://drive.google.com/uc?export=view&id=14pLjdHOKozSED2eVMWjopYNb69k1Bm9b)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Installing a Control Panel
+
+We have a few choices - Cloudpanel, HestiaCP, Webadmin etc.. Here I am documenting the steps I take for using Cloudpanel for the Wordpress installation
 
  #### Install Cloud Panel
- 
+ ```
+curl -sS https://installer.cloudpanel.io/ce/v2/install.sh -o install.sh && sudo bash install.sh --ssh_port 22022 
+```
  https://www.cloudpanel.io/docs/v2/getting-started/other/
 
-curl -sS https://installer.cloudpanel.io/ce/v2/install.sh -o install.sh && sudo bash install.sh --ssh_port <your_new_port> 
+  _Since I have a different SSH port than the usual 22, will need to add that SSH part for the installation_
 
-$ apt-get autoremove && apt-get autoclean
+#### Housekeeping
+```
+apt-get autoremove && apt-get autoclean
+```
 
 https://yourIpAddress:8443
 
