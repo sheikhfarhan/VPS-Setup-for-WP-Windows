@@ -553,16 +553,13 @@ port = http,https
 ```
 sudo apt install python3-systemd
 ```
-And add:
-backend=systemd under [sshd] in the jail.local file
-
 #### Check the new rules by:
 ```
 sudo iptables -S
 sudo iptables -L
 ```
 
-#### To check bans
+#### To Check Bans/Jails
 ```
 sudo fail2ban-client status sshd
 ```
@@ -644,14 +641,16 @@ Add: Custom SSH Port - 22022 - ip6: ::/0
 + Enter the Domain Name as clp.domain.com, enter https://127.0.0.1:8443 as Reverse Proxy Url.
 + Make sure the https is the url
 + User: reverseproxy (this is just to contain the /home docs)
+
+![image](https://drive.google.com/uc?export=view&id=15fE6i9sNaV5DYcIusBA7NWfDJls2aVVv)
+
 + Once created, go to Manage -> SSL -> and import Cloudflare Origin Certificate for clp.domain.com (to log into the panel)
 + The Cloudflare Origin Certificate was from the previous step
 
-![image](https://drive.google.com/uc?export=view&id=15RRASwdVI7NcwkFTTUT34pRiXfYjDKP5)
+![image](https://drive.google.com/uc?export=view&id=15iLO7ePHRr7W9FWKEnOdGTCps83yeTdx)
 
-Go back to Cloudflare DNS page and enable Proxy for the clp.domain.com A record
-
-https://clp.domain.com will now bring to CloudPanel login page with SSL
++ Go back to Cloudflare DNS page and enable Proxy for the clp.domain.com A record
++ https://clp.domain.com will now bring to CloudPanel login page with SSL
 
 ![image](https://drive.google.com/uc?export=view&id=15wstwfoOh_CWaUqsgSXjxH2U_T1h_n7B)
 
@@ -666,6 +665,8 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-auth
 
 ## **:+1: Server is hardened and Web Control Panel is ready**
 ## TIME TO INSTALL WORDPRESS!
+
+##############  ####################
 
 Install /Run Wordpress on test.domain.com
 
