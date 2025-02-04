@@ -1,13 +1,18 @@
-# VPS-Cloudpanel-Wordpress-Setup
+# VPS-Cloudpanel-Wordpress-Setup (Win 11)
 Version: 1.1\
 Date: 30 Jan 2025
 
-// some intro goes here //
+I have been deploying many VPSs for varied use-cases for past years and thought it was time to document the steps I use for my own reference. The idea is to spin up a basic VPS up, layer some security and allow me easy access to the server from my PC (Windows 11) and other devices I own. For this project, I want to set up a Wordpress website using a free control panel. Been using Cloudpanel and Cloudflare with no issues for the past year, am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
 + Main workstation: Windows 11 PC
 + Terminal: Powershell 7.x
 + 1 x Admin/User use-case (me)
 + 1 x main SSH key (mine)
++ VPS (harderned)
++ DNS management via Cloudflare (+ Origin Certificates issuance)
++ Cloudpanel as the control panel under reverse proxy (to achieve clp.domain.com as my panel's login)
++ Cloudpanel default stack is LEMP (Nginx)
++ Installation of a Wordpress (hardened)
 
 ## Select a VPS (Virtual Private Server) Provider
 
@@ -31,7 +36,9 @@ Shortlisted options are all with SG-located datacenter. Going for a minimum of 2
 + ~ SGD 25/mth: 2vCPU | 2GB Ram | 60 GB NVMe SSD
 
 For this test deployment, am using Digital Ocean since I have $200 free referral credits to use up within the next 60 days :)\
-Get your free $200 credit here: https://m.do.co/c/97213212086d
+Get your free $200 credit here: https://m.do.co/c/97213212086d\
+
+For the production-ready site, may go for somewhere else or stick to DO, will see..
 
 ## Install Powershell 7.5 / 7.x
 
@@ -132,7 +139,7 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 ![image](https://drive.google.com/uc?export=view&id=13DVacST8KJNqqWrJv9beCkuZdujufuAu)
 
-#### After adding the just-created public key:
+#### After adding public key:
 
 ![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
@@ -144,7 +151,7 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 ![image](https://drive.google.com/uc?export=view&id=13HNaW5E5zAfEmNmQ7GQlvGcHa_ix781y)
 
-## SSH Config file for User in Windows
+## SSH Config file in Windows
 
 We did rename the key to some other name than the default names (id_rsa etc..), so, useful to add some config info for Windows:
 
@@ -177,12 +184,35 @@ Host dosvr1
 > + Can replace Host (which is an alias, sort of shortcut name) to anything
 > + Hostname is usually IP address or domain
 > + IdentityFile is the path to the private keys
-> + Can also open and edit the config file using Notepad from Windows Explorer
-> + To use same config file and configure change of SSH port
+> + Can use Notepad to open and edit the config file from Windows Explorer
+> + To use the same config file and configure change of SSH port later
 
 Save file and Exit terminal
 
-## SSH into the server via root access:
+#### Extras:
+Other examples of configs:
+
+```
+# Config for use specific key for github
+Host github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/id_ed25519_github
+IdentitiesOnly yes
+
+# For server 172.x.x.x
+Host 172.x.x.x
+User user
+Port 2121
+IdentityFile ~/.ssh/id_ed25519
+IdentitiesOnly yes
+
+# For all other servers
+Host *
+User root
+```
+
+## SSH via root access:
 
 From Powershell:
 ```
@@ -191,7 +221,7 @@ ssh root@dosvr1
 
 ![image](https://drive.google.com/uc?export=view&id=13JILgMEERSxFgLuyzCLfT7G5-ENkd7Bb)
 
-**:+1: VPS Server is up and running with root SSH access and for easy and secured entry from Desktop PC.**
+**:+1: VPS is up with root access and for easy and secured entry from Desktop PC.**
 
 ## Initial Housekeeping
 
@@ -208,8 +238,7 @@ Decided to change it to something shorter
 hostnamectl set-hostname dosvr1
 ```
 
-### Double check and verify change takes effect
-
+### Verify change takes effect
 ```
 hostname
 ```
@@ -219,23 +248,23 @@ cat /etc/hostname
 ```
 ![image](https://drive.google.com/uc?export=view&id=13rhitH7hncm1_IN5HsVkCYgL2ayuKAOJ)
 
-### Reboot the server (and log back in to continue)
+### Reboot server (and log back in to continue)
 ```
 shutdown -r now
 ```
 
-### Change System Time / Change Time and Time Zone:
+### Change System Time / Time Zone:
 ```
 dpkg-reconfigure tzdata
 ```
 Follow on screen instructions to set timezone. 
 
-### Restart cron to ensure system pick up the change
+### Restart cron to ensure system picks up the change
 ```
 service cron restart
 ```
 
-### Disable unattended upgrades:
+### Disable unattended-upgrades:
 ```
 dpkg-reconfigure unattended-upgrades
 ```
@@ -244,6 +273,7 @@ or can remove it completely:
 apt remove unattended-upgrades
 ```
 ### Check SSH authorized_keys file
+
 Ensure that the 2 public keys are in the /root/.ssh folder
 
 ![image](https://drive.google.com/uc?export=view&id=13wlVDx-7IzAv9cODGNNyDyUf-m2X9VGV)
@@ -280,10 +310,9 @@ systemctl restart sshd
 > All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a seperate authorized_keys file in /root/.ssh/ and for
 in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
 
-## Create new user
+## Create New user
 
-### Create new sudo user
-
+### Create sudo user
 ```
 adduser user
 usermod -aG sudo user
@@ -297,13 +326,14 @@ mkdir /home/{user}/.ssh
 ```
 cp /root/.ssh/authorized_keys /home/{user}/.ssh/authorized_keys
 ```
+
 ### Setup ownership and permissions:
 ```
 chown -R {user}:{user} /home/{user}/.ssh
 chmod 700 /home/{user}/.ssh
 chmod 600 /home/{user}/.ssh/authorized_keys
 ```
-**Now the new sudo user has the public keys safely in their own authorized_keys file to SSH in next**
+**Now the new sudo user has the public keys safely in their own authorized_keys file**
 
 ![image](https://drive.google.com/uc?export=view&id=13xGpj9uI-0o02swOXNLHBgflWjBRwEOw)
 
@@ -313,6 +343,7 @@ service ssh restart
 ```
 
 ## SSH in via sudo user
+
 Open new Powershell terminal
 ```
 ssh sfarhan@dosvr1
@@ -322,94 +353,127 @@ The "dosvr1" is what we defined in the Windows side of things /.ssh config file 
 
 ![image](https://github.com/user-attachments/assets/6264efc1-fa13-4894-a038-21a3a0df0742)
 
-############################################################################
+> [!NOTE]
+> Test a few sudo commands to ensure all is okay, then next step is to disable root login and securing SSH access
 
-## Change some settings for SSH
+############### #################
 
-Disable password authorization first then change SSH Port when UFW is set up
+## Securing SSH Accecss
 
-$ sudo vim /etc/ssh/sshd_config
+The idea is to:
++ Change SSH port from 22 to another (here I am using 22022)
++ Disable RootLogin
++ Disable Entry points via Passwords (only SSH keys)
 
-# Backup original config file
-$ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+#### Backup original config file
+```
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+```
 
-Change SSH port from 22 to 22022 < later
-PermitRootLogin yes (later change) 
+#### Make changes to file
+```
+sudo vim /etc/ssh/sshd_config
+```
+```
+Port 22022
+PermitRootLogin no
 PubkeyAuthentication yes
-AuthorizedKeysFile .ssh/authorized_keys
-AuthorizedKeysCommand none
-AuthorizedKeysCommandUser nobody
 PasswordAuthentication no
-ChallengeResponseAuthentication no
-KerberosAuthentication no
-GSSAPIAuthentication yes
-GSSAPICleanupCredentials no
-UsePAM no
-X11Forwarding yes
-PrintMotd no
-
-$ sudo service ssh restart
-
-$ sudo systemctl restart sshd
-
-Before logging off, if using windows 11/Powershell as a terminal to SSH in, need to add new port number in the client's .ssh config file
-
-### Run Powershell as Administrator and Open config file
 ```
-code C:/Users/$USER/.ssh/config
+```
+sudo service ssh restart
 ```
 
-Alternatively, can open the file directly via Notepad in Windows and edit-save the file.
+>[!NOTE]
+> In Ubuntu 24.04, behavior is slightly different than what I am used to for changing of SSH port ie: change /etc/ssh/sshd_config file to indicate a new port #, then restart the service. There are additional steps in Ubuntu 24.04 it seems.
+> If not changing the port, can skip some of the steps below
 
-### Add the new port number in config file
+#### Activate new config (for the SSH port part)
 
+To activate this new config, it is now required **to inform systemd about the change**:
 ```
-# Per-Host Per User basis config
-# this is main root access
-Host dosvr1-root # to remove when the dust settles
-    Hostname {VPS IP Address} 
-    Port 22022
-    User root
-    Identityfile C:/Users/$USER/.ssh/root-key
-    IdentitiesOnly yes
-
-# this is user access
-Host dosvr1-user
-    Hostname {VPS IP Address} 
-    Port 22022
-    User user
-    Identityfile C:/Users/$USER/.ssh/admin-key
-    IdentitiesOnly yes
+sudo systemctl daemon-reload
+```
+Then the ssh service and socket can be restarted, to **activate the change**:
+```
+sudo systemctl restart ssh.socket
+sudo systemctl restart ssh.service
 ```
 
-Other examples of configs:
+#### Verify new SSH port number is listening:
+```
+sudo netstat -tuln | grep :22022
+```
+
+> [!IMPORTANT]
+> Before logging off, need to setup new port in UFW (Firewall) settings and add new SSH port in Windows SSH config file
+> Do not close the existing session! and continue next steps
+
+### Add Rules in UFW
+
+#### Start UFW
+
+UFW is already pre-installed with Ubuntu 24.04 but disabled. 
 
 ```
-# Config for use specific key for github
-Host github.com
-HostName github.com
-User git
-IdentityFile ~/.ssh/id_ed25519_github
-IdentitiesOnly yes
-
-# For server 172.x.x.x
-Host 172.x.x.x
-User user
-Port 2121
-IdentityFile ~/.ssh/id_ed25519
-IdentitiesOnly yes
-
-# For all other servers
-Host *
-User root
+sudo ufw enable
 ```
-Before logging off, Start a new terminal to SSH in to test
 
-## Fail2ban & UFW
+#### Check UFW is running
+```
+sudo ufw status
+```
 
-Secure SSH via UFW (HestiaCP no need)
+#### Establish Default Rule
+```
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+```
 
-apt install ufw
+#### Allow new SSH port
+```
+sudo ufw allow 22022/tcp
+sudo ufw allow out 22022/tcp
+```
+
+#### Add other basic rules for UFW
+```
+sudo ufw allow http/tcp 
+sudo ufw allow https/tcp
+sudo ufw logging off # or sudo vim /etc/ufw/ufw.conf (LOGLEVEL=off).
+```
+
+#### Check UFW rules
+```
+sudo UFW status
+```
+
+INSERT IMAGE HERE!
+
+> [!NOTE]
+> To remove port 22/tcp only AFTER Cloudpanel is installed and all okay!
+> If remove now, it is okay too, then will need to add the port info during installation process
+
+### Add new SSH port in Window's SSH config file:
+
+Open the config file via Notepad and add the port info. File is at C:/Users/{user}/.ssh/config
+```
+# this is main user access
+Host dosvr1
+    Hostname {IP address}
+    Port 22022 # <-this
+    Identityfile C:/Users/{user}/.ssh/sfarhan-key
+```
+Save file
+
+> [!IMPORTANT]
+> Before logging off, Start a new terminal to SSH in to test
+
+#### Open new terminal (without closing the current session)
+
+Log in into server as usual without need to specify port info:
+
+## Fail2ban
 
 $ sudo ufw default allow outgoing
 $ sudo ufw default deny incoming
@@ -443,8 +507,11 @@ Test multiple times. If all okay and after install Cloudpanel:
 $ sudo ufw delete allow 22/tcp
 $ sudo ufw delete allow out 22/tcp
 
-Change PermitRootlogin config to no:
+#### Change PermitRootlogin config to no:
 $sudo vim /etc/ssh/sshd_config
+
+
+
 
 Fail2ban Install:
 
@@ -534,10 +601,15 @@ sudo netstat
 can also use the Nmap command in order to discover hosts and services. 
 nmap domain.com
 
-Cloud Panel
+## Installing Control Panel
 
+We have a few choices, Cloudpanel, HestiaCP, Webadmin etc.. Here I am documenting the steps I take for using Cloudpanel for the Wordpress installation
 
-Install Cloud Panel:  https://www.cloudpanel.io/docs/v2/getting-started/other/
+ #### Install Cloud Panel
+ 
+ https://www.cloudpanel.io/docs/v2/getting-started/other/
+
+curl -sS https://installer.cloudpanel.io/ce/v2/install.sh -o install.sh && sudo bash install.sh --ssh_port <your_new_port> 
 
 $ apt-get autoremove && apt-get autoclean
 
