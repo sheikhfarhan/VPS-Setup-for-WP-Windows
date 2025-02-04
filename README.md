@@ -351,7 +351,7 @@ ssh sfarhan@dosvr1
 _Note:
 The "dosvr1" is what we defined in the Windows side of things /.ssh config file above_
 
-![image](https://drive.google.com/uc?export=view&id=14_gjzMKbAiTfsX5MaWx8rK9E17Kp8og)
+![image](https://drive.google.com/uc?export=view&id=14iyqnQSlsUL_ntbHu26chEN50E_InBsS)
 
 > [!NOTE]
 > Test a few sudo commands to ensure all is okay, then next step is to disable root login and securing SSH access
