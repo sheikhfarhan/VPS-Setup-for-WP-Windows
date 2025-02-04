@@ -323,9 +323,7 @@ chown -R {user}:{user} /home/{user}/.ssh
 chmod 700 /home/{user}/.ssh
 chmod 600 /home/{user}/.ssh/authorized_keys
 ```
-**Now the new sudo user has the public keys safely in their own authorized_keys file**
-
-![image](https://github.com/user-attachments/assets/9ec2bf30-49e7-4eb0-b44f-3091e04b2027)
+**Now the new sudo user has the public keys in their own authorized_keys file**
 
 ### Restart ssh
 ```
@@ -354,7 +352,7 @@ The "dosvr2" is what we defined in the Windows side of things /.ssh config file 
 The idea is to:
 + Change SSH port from 22 to another (here I am using 22022)
 + Disable RootLogin
-+ Disable Entry points via Passwords (only SSH keys)
++ Disable entry points via Passwords (only SSH keys)
 
 #### Backup original config file
 ```
