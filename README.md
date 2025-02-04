@@ -335,7 +335,7 @@ systemctl restart ssh.service
 
 Open new Powershell terminal
 ```
-ssh sfarhan@dosvr1
+ssh sfarhan@dosvr2
 ```
 _Note:
 The "dosvr2" is what we defined in the Windows side of things /.ssh config file above_
@@ -460,7 +460,7 @@ Save file
 
 #### Open new terminal (without closing the current session)
 
-Log in into server as usual without need to specify port info:
+Log-in server as usual without the need to specify port info:
 
 ![image](https://drive.google.com/uc?export=view&id=15RGq_uH_yiBnISAQmnYGUTnaFtz-9Vjj)
 
@@ -544,7 +544,7 @@ port = http,https
 ```
 
 > [!NOTE]
-> POtentially can new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
+> Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
 > https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
 
 #### Install this if fail2ban jock error shows up:
