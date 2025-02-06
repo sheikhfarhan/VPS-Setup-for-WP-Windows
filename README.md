@@ -2,9 +2,9 @@
 Version: 1.1\
 Date: 30 Jan 2025
 
-I have been deploying many VPSs for varied use-cases for past years and thought it was time to document the steps I use for my own reference. The idea is to spin up a VPS, layer some security, and allow me easy access to the server from my Home PC (Windows 11) and other devices I own.
+For the past years, I have been deploying many VPSs for varied use cases. I thought it was time to document the steps I use for my own reference. The idea is to spin up a VPS, layer some security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
-For this project, I want to set up a Wordpress website using a free control panel. Been using Cloudpanel and Cloudflare with no issues for couple of years already, am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+I want to set up a Wordpress website using a free control panel for this project. Been using Cloudpanel and Cloudflare with no issues for a couple of years already. I am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
 These steps/guides are with the below stacks/environments:
 
