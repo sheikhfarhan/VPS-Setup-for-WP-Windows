@@ -21,6 +21,9 @@ These steps/guides are with the below stacks/environments:
 
 Lets go!
 
+This page is where the entire stacks are, but for specific sections/parts of the deployment, the shortcuts are:
+Part 1 - VPS
+
 ## Select a VPS (Virtual Private Server) Provider
 
 Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
