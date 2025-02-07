@@ -672,32 +672,27 @@ Credentials are as per saved earlier in Cloudpanel
 
 #### Install Security Plugins
 
-+ WP fail2ban – Advanced Security
-_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. Will add these in 
+**Wordfence**
 
-Plugins: 
+Scan and if they found a file that needs to hide but unable to hide at UI level eg:
 
-Limit Login Attempts Reloaded
+![image](https://drive.google.com/uc?export=view&id=1-Rn_VrF9rJIT_4jGwXZDtu-B-t3Y_6h3)
 
-Wordfence: 
-
-# Block WordPress xmlrpc.php requests
-<Files xmlrpc.php>
-order deny,allow
- 
-deny from all
-allow from 123.123.123.123
-</Files>
-
-Use Wordfence to scan:
-
-if they found a file that needs to hide but unable to hide at UI level, go to Cloudflare-> under Vhost and add:
+Go to CloudPanel -> Site -> Manage -> Vhost and add:
 
 location ~ \.user\.ini$ {
 deny all;
 }
 
-Plugin: WP Fail2ban
+Try another scan and should be cleared of the notification:
+
+![image](https://drive.google.com/uc?export=view&id=1-W7Xn8GxUf-QRim7TJLefBDGplbbS2Eg)
+
+**Limit Login Attempts Reloaded**
+
+**WP fail2ban – Advanced Security**
+
+_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. Will add these in 
 
 Explore the plugin conf files at htdocs. find the appropriate conf file to copy over to fail2ban filter.d directory
 
