@@ -1,11 +1,11 @@
-# Intro\
+# Intro
 ## Win 11 + VPS + Cloudpanel + Cloudflare + Wordpress Setup
 Version: 1.1\
 Date: 30 Jan 2025
 
-For the past years, I have been deploying many VPSs for varied use cases. I thought it was time to document the steps I use for my own reference. The idea is to spin up a VPS, layer some security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
+For the past years, I have been deploying many VPSs for varied use cases. I thought it was time to document the steps I use for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
-I want to set up a Wordpress website using a free control panel for this project. Been using Cloudpanel and Cloudflare with no issues for a couple of years already. I am familiar with them and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+I want to set up a Wordpress website using a free control panel for this project. Been using Cloudpanel (taking advantage of the 1-click installation of Wordpress and Sites' Management features)  and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use-case/requirements and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
 These steps/guides are with the below stacks/environments:
 
@@ -22,7 +22,7 @@ These steps/guides are with the below stacks/environments:
 
 Lets go!
 
-This page is where the entire stacks are, but for specific sections/parts of the deployment, the shortcuts are:
+This page is where the entire steps are, but for specific sections/parts of the deployment, the shortcuts are:
 Part 1 - VPS
 
 ## Select a VPS (Virtual Private Server) Provider
