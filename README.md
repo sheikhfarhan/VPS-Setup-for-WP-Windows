@@ -529,34 +529,6 @@ sudo systemctl restart fail2ban
 sudo service fail2ban restart
 ```
 
-#### Add these below after install WP Fail2ban plugin
-```
-[wordpress-hard]
-enabled = true
-filter = wordpress-hard
-logpath = /var/log/auth.log
-maxretry = 3
-port = http,https
-
-[wordpress-soft]
-enabled = true
-filter = wordpress-soft
-logpath = /var/log/auth.log
-maxretry = 3
-port = http,https                                                                                                                        
-
-[wordpress-extra]
-enabled = true
-filter = wordpress-soft
-logpath = /var/log/auth.log
-maxretry = 3
-port = http,https
-```
-
-> [!NOTE]
-> Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
-> https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
-
 #### Install this if fail2ban jock error shows up:
 ```
 sudo apt install python3-systemd
@@ -662,42 +634,47 @@ Add: Custom SSH Port - 22022 - ip6: ::/0
 
 ![image](https://drive.google.com/uc?export=view&id=15wstwfoOh_CWaUqsgSXjxH2U_T1h_n7B)
 
-#### Add site
-
-If after installing Cloudpanel, fail2ban fails
-Here is a workaround:
-wget https://launchpad.net/ubuntu/+source/fail2ban/1.1.0-1/+build/28291332/+files/fail2ban_1.1.0-1_all.deb
-sudo dpkg -i fail2ban_1.1.0-1_all.deb
-https://bugs.launchpad.net/ubuntu/+source/fail2ban/+bug/2055114/comments/22
-https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04
-
 ## **:+1: Server is hardened and Web Control Panel is ready**
-## TIME TO INSTALL WORDPRESS!
 
 ##############  ####################
 
-Install /Run Wordpress on test.domain.com
+## INSTALL WORDPRESS
 
-test.domain.com
+#### 1-click Wordpress Installation
 
-Adjust PHP Settings
+![image](https://drive.google.com/uc?export=view&id=1aei7zObzebNXOVBzG5fIi8SteQtsftEE)
 
-Add CF's Cert
+#### Copy and Save the generated Credentials
 
-Allow from CF only
+![image](https://drive.google.com/uc?export=view&id=1-7kMQ8vO9o8AVcNC0iWVNScxjV5eGmka)
 
-Enter A (AAAA) records + CNAME in CF
+#### Add Cloudflare's Certificate
 
-MYSQL:
+![image](https://drive.google.com/uc?export=view&id=1-8BTHuaQZZ-qpnnyqxjFMonCTHuNFFcN)
+![image](https://drive.google.com/uc?export=view&id=1-AG4hzUfCRjrsGx_EOKC1u_cNmSmEEvh)
 
-Host: 127.0.0.1
+#### Add subdomain for the site in Cloudflare
 
-User Name: root
+![image](https://drive.google.com/uc?export=view&id=1-CjJqVPhAWIXNB-hmEWdmpiCjraNyquR)
 
-Password: xxxxxxx
+#### Additional Settings:
++ Site -> Manage -> Security -> Allow traffic from Cloudflare only
++ Site -> Manage -> Settings -> Adjust PHP Settings and Add SSH Keys for SSH/SFTP (though CloudPanel already have a decent file manager in-built)
++ Can start tweaking any web-related settings where makes sense!
 
-Port: xxxx
+#### Wordpress/Website is Live!
 
+![image](https://drive.google.com/uc?export=view&id=1-IE_KZnigr1iEN3vLUz7UGyonJON-r0f)
+
+#### Login to WP-Admin @ domain.com/wp-admin
+
+Credentials are as per saved earlier in Cloudpanel
+
+#### Install Security Plugins
+
++ Wordfence
++ WP fail2ban – Advanced Security
++     WPf2b comes with three fail2ban filters: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. These are designed to allow a split between immediate banning (hard) and the traditional         more graceful approach (soft), with extra rules for custom configurations.
 Plugins: 
 
 Limit Login Attempts Reloaded
@@ -732,8 +709,15 @@ add the filter to jail.local to activate the ban
 
 vim /etc/fail2ban/jail.local
 
-[wordpress-hard]
+At jail.local conf file, under wordpress filters/jail header, Use /home/sf-wp-admin /logs and /home/adco-wp-admin
 
+exit
+
+Limit Login Attempts Reloaded
+
+#### Add these below after install WP Fail2ban plugin
+```
+[wordpress-hard]
 enabled = true
 filter = wordpress-hard
 logpath = /var/log/auth.log
@@ -745,7 +729,7 @@ enabled = true
 filter = wordpress-soft
 logpath = /var/log/auth.log
 maxretry = 3
-port = http,https
+port = http,https                                                                                                                        
 
 [wordpress-extra]
 enabled = true
@@ -753,12 +737,11 @@ filter = wordpress-soft
 logpath = /var/log/auth.log
 maxretry = 3
 port = http,https
+```
 
-At jail.local conf file, under wordpress filters/jail header, Use /home/sf-wp-admin /logs and /home/adco-wp-admin
-
-exit
-
-Limit Login Attempts Reloaded
+> [!NOTE]
+> Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
+> https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
 
 
 
