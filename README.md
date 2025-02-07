@@ -23,7 +23,13 @@ These steps/guides are with the below stacks/environments:
 Lets go!
 
 This page is where the entire steps are, but for specific sections/parts of the deployment, the shortcuts are:
-Part 1 - VPS
+
++ [Part 1 - SSH Setup for Windows](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/0ba0e4f94dd82047c42cae3570c38d2442edb446/Part%201%20-%20SSH%20Setup%20for%20Windows)
++ Part 2 - VPS Setup & Login
++ Part 3 - Hardening: SSH, UFW & Fail2ban
++ Part 4 - Cloudflare, SSLs & DNS Setup
++ Part 5 - CloudPanel Setup
++ Part 6 - Install & Securing Wordpress
 
 ## Select a VPS (Virtual Private Server) Provider
 
