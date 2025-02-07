@@ -672,9 +672,9 @@ Credentials are as per saved earlier in Cloudpanel
 
 #### Install Security Plugins
 
-+ Wordfence
 + WP fail2ban – Advanced Security
-+     WPf2b comes with three fail2ban filters: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. These are designed to allow a split between immediate banning (hard) and the traditional         more graceful approach (soft), with extra rules for custom configurations.
+_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. Will add these in 
+
 Plugins: 
 
 Limit Login Attempts Reloaded
