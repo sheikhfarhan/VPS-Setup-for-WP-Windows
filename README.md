@@ -140,42 +140,39 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 > + If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.
 > + Then standby to add those public keys onto the server when ready.
 
-#### #### ####
-
-Windows is ready to remotely SSH to our VPS when ready!\
+:desktop_computer:	Windows is ready to remotely SSH to our VPS when ready!\
 Lets now go over to our VPS Provider side of things.. 
 
-## Initiate & Deployment of Server
+## Part 2 - VPS Setup & LogIn
 
 #### Password-less SSH
-+ For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature.
-+ If not, deploy with root password.
-+ If add an SSH key, no root credentials will be sent via email.
++ For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature
++ If not, deploy with root password
++ If add an SSH key, no root credentials will be sent via email
 
-#### In Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key"
+#### For Digital Ocean
 
 ![image](https://drive.google.com/uc?export=view&id=13DVacST8KJNqqWrJv9beCkuZdujufuAu)
+
+The settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key"
 
 #### After adding public key:
 
 ![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
-#### When creating server, can now have option to add the public key for a password-less entry
-
 ![image](https://drive.google.com/uc?export=view&id=13FmLD46ZIauh1qt87cei8jwHP0o8Fm0i)
 
-## Server created!
+When creating server, now will have option to add the public key for a password-less entry
+
+#### :cloud: Server created!
 
 ![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
-## SSH Config file in Windows
-
-We did rename the key to some other name than the default names (id_rsa etc..), so, useful to add some config info for Windows:
+Now going back to Windows to add the IP address to a SSH Config file...
 
 #### Create new Config file for User
 
 Run Powershell as **Administrator** and navigate to .ssh folder and create the file.
-
 ```
 cd C:/Users/{user}/.ssh
 ```
@@ -187,9 +184,7 @@ or
 New-Item config
 ```
 
-### Specifying Identityfile for Windows/Client SSH side of things:
-
-Add the following to the config file:
+#### Add the following to the config file:
 ```
 # this is main user access
 Host dosvr2
@@ -200,6 +195,7 @@ Host dosvr2
 ![image](https://drive.google.com/uc?export=view&id=154olKi795BjFPCaSBd_5mFFkVV7GHUbw)
 
 > [!Note]
+> + We did rename the key to some other name than the default names (id_rsa etc..) - useful to add some config info for Windows
 > + Can replace Host (which is an alias, sort of shortcut name) to anything
 > + Hostname is usually IP address or domain
 > + IdentityFile is the path to the private keys
@@ -207,29 +203,6 @@ Host dosvr2
 > + To use the same config file and configure change of SSH port later
 
 Save file and Exit terminal
-
-#### Extras:
-Other examples of configs:
-
-```
-# Config for use specific key for github
-Host github.com
-HostName github.com
-User git
-IdentityFile ~/.ssh/id_ed25519_github
-IdentitiesOnly yes
-
-# For server 172.x.x.x
-Host 172.x.x.x
-User user
-Port 2121
-IdentityFile ~/.ssh/id_ed25519
-IdentitiesOnly yes
-
-# For all other servers
-Host *
-User root
-```
 
 ## SSH via root access:
 
@@ -239,6 +212,8 @@ ssh root@dosvr2
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
+
+:white_check_mark: **And we are in! **
 
 ## Initial Housekeeping
 ```
