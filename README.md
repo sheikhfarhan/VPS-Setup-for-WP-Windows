@@ -1,7 +1,4 @@
 # Intro
-## Win 11 + VPS + Cloudpanel + Cloudflare + Wordpress Setup
-Version: 1.1\
-Date: 30 Jan 2025
 
 For the past years, I have been deploying many VPSs for varied use cases. I thought it was time to document the steps I use for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
@@ -20,7 +17,7 @@ These steps/guides are with the below stacks/environments:
 + Cloudpanel default stack is LEMP (Nginx)
 + Installation of Wordpress (hardened)
 
-Lets go!
+## Win 11 + VPS + Cloudpanel + Cloudflare + Wordpress Setup
 
 This page is where the entire steps are, but for specific sections/parts of the deployment, the shortcuts are:
 
@@ -57,18 +54,20 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d\
 
 For the production-ready site, may go for somewhere else or stick to DO, will see..
 
-## Install Powershell 7.5 / 7.x
+## Install Powershell 7.5.x
 
-+ Install Powershell 7.x from Windows Store
++ Install Powershell 7.5.x from Windows Store
 + Other methods of installation and guide here:
 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
 + Start PowerShell
 
 ![image](https://drive.google.com/uc?export=view&id=130cV5uuvJmtIihQX7jkdeLXtvQ2g4uOT)
 
-## SSH Keys Setup
+Allright, Lets go!
 
-#### Generate Keys via PowerShell
+## Part 1 - SSH Setup for Windows
+
+### Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
@@ -77,7 +76,7 @@ Passphrase: xxxxxx
 
 ![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
-#### Check Windows User ~/.ssh folder
+### Check Windows User ~/.ssh folder
 
 ```
 ls
@@ -89,49 +88,47 @@ ls
 > + -C "" will not have any comments in the keys
 > + Can remove the private keys from local directory after adding key to [ssh-add] setup and store it at Bitwarden for safekeeping
 
-**All keys are autosave to: C:/Users/{user}/.ssh folder**
+**_All keys are autosave to: C:/Users/{user}/.ssh folder_**
 
-## Set up [sshd] service
+### Enable OpenSSH in Windows
 
-#### Set the sshd service to start automatically
+Go to System -> Optional Features -> Add OpenSSH
 
-Open PowerShell as **Administrator** and enter:
+![image](https://drive.google.com/uc?export=view&id=1-XfrWohXqF5buyT7Y6m7HR5xIyvGhpre)
 
+### Set up [sshd] & [ssh-agent] services
+
+Open PowerShell as _Administrator_ and enter:
+
+[sshd]
 ```
 Get-Service -Name sshd | Set-Service -StartupType Automatic
 ```
-
-#### Start the sshd service
-```
-Start-Service sshd
-```
-
-![image](https://drive.google.com/uc?export=view&id=136DHsa25Js9P4rv4stwiRw_76d1khBZR)
-
-## Setup [ssh-agent]
-
-+ This setup and configuration for Windows is for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account
-+ And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
-+ By default the [ssh-agent] service is diabled
-
-**Run Powershell as Administrator**
-
-#### Get ssh-agent to start automatically
+[ssh-agent]
 ```
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
+These will set the sshd and ssh-agent services to start automatically
 
-#### Start the service: 
+### Start the sshd and ssh-agent services
+```
+Start-Service sshd
+```
 ```
 Start-Service ssh-agent
 ```
-
-#### This should return a status of Running
+### Check ssh-agent is running
 ```
 Get-Service ssh-agent
 ```
+![image](https://drive.google.com/uc?export=view&id=136DHsa25Js9P4rv4stwiRw_76d1khBZR)
 
-#### Load private key onto [ssh-agent]:
+> [!NOTE]
+> + This setup and configurations for Windows are for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account
+> + And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
+> + By default the [ssh-agent] service is disabled
+
+### Load private key onto [ssh-agent]
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
@@ -143,7 +140,10 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 > + If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.
 > + Then standby to add those public keys onto the server when ready.
 
-<p></p>
+#### #### ####
+
+Windows is ready to remotely SSH to our VPS when ready!\
+Lets now go over to our VPS Provider side of things.. 
 
 ## Initiate & Deployment of Server
 
