@@ -213,7 +213,7 @@ ssh root@dosvr2
 
 ![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
 
-:white_check_mark: **And we are in! **
+:white_check_mark: **And we are in!**
 
 ## Initial Housekeeping
 ```
