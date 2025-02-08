@@ -204,7 +204,7 @@ Host dosvr2
 
 Save file and Exit terminal
 
-## SSH via root access:
+#### SSH via root access:
 
 From Powershell:
 ```
@@ -213,9 +213,10 @@ ssh root@dosvr2
 
 ![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
 
-:white_check_mark: **And we are in!**
+:white_check_mark: **And we are in!**\
+Lets secure our VPS next..
 
-## Initial Housekeeping
+## Part 3 - Housekeeping & Hardening of VPS
 ```
 apt update && apt upgrade
 ```
@@ -223,23 +224,23 @@ apt update && apt upgrade
 apt autoremove && apt autoclean
 ```
 
-### Reboot server (and log back in to continue)
+#### Reboot server (and log back in to continue)
 ```
 shutdown -r now
 ```
 
-### Change System Time / Time Zone:
+#### Change System Time / Time Zone:
 ```
 dpkg-reconfigure tzdata
 ```
 Follow on screen instructions to set timezone. 
 
-### Restart cron to ensure system picks up the change
+#### Restart cron to ensure system picks up the change
 ```
 service cron restart
 ```
 
-### Disable unattended-upgrades:
+#### Disable unattended-upgrades:
 ```
 dpkg-reconfigure unattended-upgrades
 ```
@@ -247,7 +248,7 @@ or can remove it completely:
 ```
 apt remove unattended-upgrades
 ```
-### Check SSH authorized_keys file
+#### Check SSH authorized_keys file
 
 Ensure that the 2 public keys are in the /root/.ssh folder
 
@@ -255,7 +256,7 @@ Ensure that the 2 public keys are in the /root/.ssh folder
 
 If not..
 
-### Create folders for .ssh and a file for authorized_keys:
+#### Create folders for .ssh and a file for authorized_keys:
 ```
 cd /root
 mkdir .ssh
@@ -266,18 +267,18 @@ nano authorized_keys
 Then put the relevant public keys in here.\
 If need to add additional public keys (eg: for Laptop/Tablet/Phone devices entry points), can add them in now.
 
-### Setup ownership and permissions:
+#### Setup ownership and permissions:
 ```
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 chown -R root:root ~/.ssh
 ```
-### Restart SSH service
+#### Restart SSH service
 ```
 systemctl restart ssh
 ```
 
-### Restart the sshd daemon, still as root, with:
+#### Restart the sshd daemon, still as root, with:
 ```
 systemctl restart ssh.service
 ```
@@ -285,40 +286,38 @@ systemctl restart ssh.service
 > [!Note]
 > All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a separate authorized_keys file in /root/.ssh/ and for in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
 
-## Create New user
-
-### Create sudo user
+#### Create New Sudo user
 ```
 adduser <user>
 usermod -aG sudo <user>
 ```
 
-### Create the .ssh folder for new sudo user:
+#### Create the .ssh folder for new sudo user:
 ```
 mkdir /home/{user}/.ssh
 ```
-### Copy the authorized_keys file that contains the public keys:
+#### Copy the authorized_keys file that contains the public keys:
 ```
 cp /root/.ssh/authorized_keys /home/{user}/.ssh/authorized_keys
 ```
 
-### Setup ownership and permissions:
+#### Setup ownership and permissions:
 ```
 chown -R {user}:{user} /home/{user}/.ssh
 chmod 700 /home/{user}/.ssh
 chmod 600 /home/{user}/.ssh/authorized_keys
 ```
-**Now the new sudo user has the public keys in their own authorized_keys file**
+**_Now the new sudo user has the public keys in their own authorized_keys file_**
 
-### Restart ssh
+#### Restart ssh
 ```
 systemctl restart ssh
 systemctl restart ssh.service
 ```
 
-## SSH in via sudo user
+#### SSH in via sudo user
 
-Open new Powershell terminal
+Open **NEW** Powershell terminal:
 ```
 ssh sfarhan@dosvr2
 ```
@@ -327,12 +326,9 @@ The "dosvr2" is what we defined in the Windows side of things /.ssh config file 
 
 ![image](https://drive.google.com/uc?export=view&id=15MF9ssfpgB-gYTX1bmrJ2_w4Ce8PWsGJ)
 
-> [!NOTE]
-> Test a few sudo commands to ensure all is okay, then next step is to disable root login and securing SSH access
+Test a few sudo commands to ensure all is okay, then next step is to disable root login, securing SSH access and implement UFW and Fail2ban
 
-############### #################
-
-## Securing SSH Accecss
+### Securing SSH Accecss
 
 The idea is to:
 + Change SSH port from 22 to another (here I am using 22022)
@@ -365,7 +361,7 @@ To activate this new config, it is now required **to inform systemd about the ch
 sudo systemctl daemon-reload
 ```
 
-### ssh service and socket can be restarted, to **activate the change**:
+#### ssh service and socket can be restarted, to **activate the change**:
 ```
 sudo systemctl restart ssh.socket
 sudo systemctl restart ssh.service
@@ -382,9 +378,7 @@ sudo ss -tulm
 > Before logging off, need to allow the new port in UFW (Firewall) settings and add new port info in Windows SSH config file\
 > Do not close the existing session! and continue next steps
 
-## Add Rules in UFW
-
-#### Start UFW
+#### Add Rules in UFW
 
 _UFW is already pre-installed with Ubuntu 24.04 but disabled._
 
@@ -426,7 +420,7 @@ sudo UFW status
 > [!NOTE]
 > Will need to add the port info during Cloudpanel's installation process, as its default port is 22
 
-### Add new SSH port in Window's SSH config file:
+#### Add new SSH port in Window's SSH config file:
 
 Open the config file via Notepad and add the port info. File is at C:/Users/{user}/.ssh/config
 ```
@@ -449,9 +443,7 @@ Log-in server as usual without the need to specify port info:
 
 ![image](https://drive.google.com/uc?export=view&id=15RGq_uH_yiBnISAQmnYGUTnaFtz-9Vjj)
 
-#################### #####################
-
-## Fail2ban
+### Fail2ban
 
 #### Install Fail2ban
 ```
@@ -508,6 +500,7 @@ sudo service fail2ban restart
 ```
 sudo apt install python3-systemd
 ```
+
 #### Check the new rules by:
 ```
 sudo iptables -S
@@ -525,13 +518,12 @@ tail -f /var/log/auth.log
 tail -f /var/log/fail2ban.log
 ```
 
-## **:+1: VPS is ready!**
-### For easy and secured entry from a Windows setup
-### Ready to install applications at will
+:+1: **VPS is ready!**
++ For easy and secured entry from a Windows setup
++ Ready to install applications at will
++ Next Step is to go over to our Cloudflare account for the DNS and SSLs
 
-#############   ################
-
-## Set Up Cloudflare for DNS Management & Additional Securities
+## Part 4 - Cloudflare Setup
 
 #### Point Nameservers to Cloudflare
 
