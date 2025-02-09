@@ -693,7 +693,7 @@ Find the appropriate conf file to copy over to server's fail2ban filter.d direct
 
 Via CLI:
 ```
-cp clp /home/$User/htdocs/$domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/
+sudo cp /home/$User/htdocs/$domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/
 ```
 _and also the -soft and the -extra conf files_
 
@@ -719,6 +719,7 @@ Add the following:
 enabled = true
 filter = wordpress-hard
 logpath = /var/log/auth.log
+backend = auto
 maxretry = 3
 port = http,https
 
@@ -726,21 +727,44 @@ port = http,https
 enabled = true
 filter = wordpress-soft
 logpath = /var/log/auth.log
+backend = auto
 maxretry = 3
-port = http,https                                                                                                                        
+port = http,https
+
 [wordpress-extra]
 enabled = true
 filter = wordpress-extra
 logpath = /var/log/auth.log
+backend = auto
 maxretry = 3
 port = http,https
 ```
 
 Save file.
 
+Restart Fail2ban
+```
+sudo systemctl restart fail2ban
+```
+
+Check logpath to see if Fail2ban's Jails are in action:
+```
+sudo tail -f /var/log/fail2ban.log
+```
+
+![image](https://drive.google.com/uc?export=view&id=10bkMEM4c3iXJZLY3dhKx2RYuTYdhVBm9)
+
+Looks good! 
+
 > [!NOTE]
 > Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
 > https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
+
+:+1: All right, WordPress website is up and running, secured (relatively), with processes in place for ease of monitoring and tweaking. 
+
+################
+
+**Next is to get a theme going, and start the web building! Let me know if there are any issues/improvements with the above steps. Happy to check them out. And hopefully, if any is following the steps above, it has been helpful.. :)**
 
 
 
