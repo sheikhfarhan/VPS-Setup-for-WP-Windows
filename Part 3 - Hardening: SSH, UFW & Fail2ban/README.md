@@ -1,6 +1,6 @@
 ## Part 3 - Hardening of VPS
 
-## Housekeeping
+#### :arrow_right_hook: Housekeeping
 ```
 apt update && apt upgrade -y
 ```
