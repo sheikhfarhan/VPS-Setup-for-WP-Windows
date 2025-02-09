@@ -516,15 +516,17 @@ sudo iptables -L
 sudo fail2ban-client status sshd
 ```
 
+![image](https://drive.google.com/uc?export=view&id=1-kkAvncAMay8uwEpc0DNV4gYm-uBeyNr)
+
 #### :arrow_right_hook: Check if loggings are working fine:
 ```
 tail -f /var/log/auth.log
 tail -f /var/log/fail2ban.log
 ```
 
-### :+1: VPS is harderned and is ready for:
+### :+1: VPS is hardened and is ready for:
 + Easy and secured entry from a Windows setup
-+ Installation of applications at will
++ and Installation of applications at will
 
 **Next Step is to go over to our Cloudflare account for the DNS and SSLs**
 
