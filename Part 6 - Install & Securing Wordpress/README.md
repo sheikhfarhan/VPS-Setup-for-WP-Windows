@@ -1,23 +1,23 @@
 ## Part 6 - INSTALL WORDPRESS
 
-#### :arrow_right_hook: 1-click Wordpress Installation
+### :arrow_right_hook: 1-click Wordpress Installation
 
 ![image](https://drive.google.com/uc?export=view&id=1aei7zObzebNXOVBzG5fIi8SteQtsftEE)
 
-#### :arrow_right_hook: Copy and Save the generated Credentials
+### :arrow_right_hook: Copy and Save the generated Credentials
 
 ![image](https://drive.google.com/uc?export=view&id=1-7kMQ8vO9o8AVcNC0iWVNScxjV5eGmka)
 
-#### :arrow_right_hook: Add Cloudflare's Certificate
+### :arrow_right_hook: Add Cloudflare's Certificate
 
 ![image](https://drive.google.com/uc?export=view&id=1-8BTHuaQZZ-qpnnyqxjFMonCTHuNFFcN)
 ![image](https://drive.google.com/uc?export=view&id=1-AG4hzUfCRjrsGx_EOKC1u_cNmSmEEvh)
 
-#### :arrow_right_hook: Add a subdomain for the site in Cloudflare
+### :arrow_right_hook: Add a subdomain for the site in Cloudflare
 
 ![image](https://drive.google.com/uc?export=view&id=1-CjJqVPhAWIXNB-hmEWdmpiCjraNyquR)
 
-#### Additional Settings:
+### Additional Settings:
 + Site -> Manage -> Security -> Allow traffic from Cloudflare only
 + Site -> Manage -> Settings -> Adjust PHP Settings and Add SSH Keys for SSH/SFTP (though CloudPanel already has a decent file manager in-built)
 + Can start tweaking any web-related settings where makes sense!
@@ -26,23 +26,25 @@
 
 ![image](https://drive.google.com/uc?export=view&id=1-IE_KZnigr1iEN3vLUz7UGyonJON-r0f)
 
-#### :arrow_right_hook: Login to WP-Admin @ domain.com/wp-admin
+### :arrow_right_hook: Login to WP-Admin @ domain.com/wp-admin
 
 Credentials are as saved earlier in Cloudpanel:
 
 ![image](https://drive.google.com/uc?export=view&id=1-zoDDEHORKhmxgxglL0scEl2dxc8Fh6G)
 
-#### :arrow_right_hook: Install Security Plugins
+### :arrow_right_hook: Install Security Plugins
 
 **1. Wordfence**
 
-#### :arrow_right_hook: Use the scan feature
+### :arrow_right_hook: Use the scan feature
 
 If they found a file that needs to hide but is unable to hide at UI level eg:
 
 ![image](https://drive.google.com/uc?export=view&id=1-Rn_VrF9rJIT_4jGwXZDtu-B-t3Y_6h3)
 
-#### :arrow_right_hook: Go to CloudPanel -> Site -> Manage -> Vhost and add:
+### :arrow_right_hook: Add to Vhost:
+
+_CloudPanel -> Site -> Manage -> Vhost_
 
 ```
 location ~ \.user\.ini$ {
@@ -50,13 +52,13 @@ location ~ \.user\.ini$ {
 }
 ```
 
-#### :arrow_right_hook: Try another scan and should be cleared of the notification:
+### :arrow_right_hook: Try another scan:
 
 ![image](https://drive.google.com/uc?export=view&id=1-W7Xn8GxUf-QRim7TJLefBDGplbbS2Eg)
 
 **2. Limit Login Attempts Reloaded**
 
-#### :arrow_right_hook: Go to Settings and configure accordingly:
+### :arrow_right_hook: Install and set accordingly:
 
 ![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
 
@@ -67,7 +69,10 @@ WPf2b comes with three fail2ban filters that we need:\
   wordpress-soft.conf\
   wordpress-extra.conf
 
-#### :arrow_right_hook: Explore the plugin's conf files at htdocs and find the appropriate conf file to copy over to server's fail2ban filter.d directory
+### :arrow_right_hook: Add Plugin's conf files over
+
++ Explore the plugin's conf files at htdocs
++ Find the appropriate conf file to copy over to server's fail2ban filter.d directory
 
 Via CLI:
 ```
@@ -85,13 +90,13 @@ open -> copy -> create respective files in /etc/fail2ban/filter.d/ -> paste:
 
 ![image](https://drive.google.com/uc?export=view&id=10Neu-zhD1tw5UEF8UHcPE4UipMwM8juj)
 
-#### :arrow_right_hook: Add the filters to jail.local to activate the ban:
+### :arrow_right_hook: Add the filters to jail.local:
 
 ```
 vim /etc/fail2ban/jail.local
 ```
 
-#### :arrow_right_hook: Add the following:
+### :arrow_right_hook: Add the following:
 ```
 [wordpress-hard]
 enabled = true
@@ -118,16 +123,17 @@ maxretry = 3
 port = http,https
 ```
 
-Save file.
+Save file to activate the ban.
 
 ![image](https://drive.google.com/uc?export=view&id=10Wa0PY6PqOdgmBsL30oZX7OL1K1_u0ie)
 
-#### :arrow_right_hook: Restart Fail2ban
+### :arrow_right_hook: Restart Fail2ban
 ```
 sudo systemctl restart fail2ban
 ```
 
-#### :arrow_right_hook: Check logpath to see if Fail2ban's Jails are in action:
+### :arrow_right_hook: Check logpath
+
 ```
 sudo tail -f /var/log/fail2ban.log
 ```
