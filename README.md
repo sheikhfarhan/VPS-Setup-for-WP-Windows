@@ -155,25 +155,25 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 ![image](https://drive.google.com/uc?export=view&id=13DVacST8KJNqqWrJv9beCkuZdujufuAu)
 
-For Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key"
+For Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key":
 
 #### :arrow_right_hook: After adding public key:
 
 ![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
-![image](https://drive.google.com/uc?export=view&id=13FmLD46ZIauh1qt87cei8jwHP0o8Fm0i)
+When creating server, now will have the option to add the public key for a password-less entry:
 
-When creating server, now will have option to add the public key for a password-less entry
+![image](https://drive.google.com/uc?export=view&id=13FmLD46ZIauh1qt87cei8jwHP0o8Fm0i)
 
 #### :arrow_right_hook: Server created!
 
 ![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
-### Now going back to Windows to add the IP address to a Config file:
+#### Going back to Windows to add the IP address to a Config file:
 
 #### :arrow_right_hook: Create new Config file for User
 
-Run Powershell as **Administrator** and navigate to .ssh folder and create the file.
+Run Powershell as **Administrator** and navigate to .ssh folder and create the file:
 ```
 cd C:/Users/{user}/.ssh
 ```
@@ -198,11 +198,11 @@ Host dosvr2
 > [!Note]
 > + Can replace Host (which is an alias, sort of shortcut name) to anything
 > + Hostname is usually IP address or domain
-> + IdentityFile is the path to the private keys, as we did rename the key to some other name the default
+> + IdentityFile is the path to the private keys, as we did rename the key to some other name than the default
 > + Can use Notepad to open and edit the config file from Windows Explorer
 > + To use the same config file and configure change of SSH port later
 
-Save file and Exit terminal
+Save file.
 
 #### :arrow_right_hook: SSH via root access:
 
