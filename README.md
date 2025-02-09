@@ -2,7 +2,7 @@
 
 I have been deploying many VPSs for varied use cases and wanted to finally document the steps I take for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
-For this project, I want to set up a WordPress website and using a free control panel. Been using Cloudpanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use case/requirements.
+For this project, I want to set up a WordPress website with a free control panel. Been using CloudPanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them and they provide what I need for my use case/requirements.
 
 And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
@@ -33,7 +33,7 @@ This page is where the entire steps are, but for specific sections/parts of the 
 
 ### Selecting a VPS (Virtual Private Server) Provider
 
-Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
+Shortlisted providers are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
 **Digital Ocean:**
 + ~ SGD 11/mth: 1 vCPU | 1GB Ram | 35 GB NVMe SSD
@@ -57,9 +57,14 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d\
 
 For the production-ready site, may go for somewhere else or stick to DO, will see..
 
-### Install Powershell 7.5.x
+Allright, Lets go!
 
-+ Primarily using Windows Terminal
+<p>&nbsp;</p>
+
+## Part 1 - SSH Setup for Windows
+
+#### :arrow_right_hook: Install Powershell 7.5.x
+
 + Installing Powershell 7.5.x from Windows Store
 + Other methods of installation and guide here:
 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
@@ -67,26 +72,15 @@ https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powers
 
 ![image](https://drive.google.com/uc?export=view&id=130cV5uuvJmtIihQX7jkdeLXtvQ2g4uOT)
 
-Allright, Lets go!
-
-<p>&nbsp;</p>
-
-## Part 1 - SSH Setup for Windows
-
 #### :arrow_right_hook: Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 ```
-_Passphrase: xxxxxx_
 
 ![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
 #### :arrow_right_hook: Check Windows User ~/.ssh folder
-
-```
-ls
-```
 
 ![image](https://drive.google.com/uc?export=view&id=135mjes1PrPOyMhpw_DBJEWFcAr7RG7Vk)
 
@@ -105,26 +99,26 @@ Go to System -> Optional Features -> Add OpenSSH
 
 #### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
 
-Open PowerShell as _Administrator_ and enter:
+Open PowerShell as _Administrator_
 
-[sshd]
+For [sshd]:
 ```
 Get-Service -Name sshd | Set-Service -StartupType Automatic
 ```
-[ssh-agent]
+For [ssh-agent]:
 ```
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
-These will set the sshd and ssh-agent services to start automatically
+These will set the sshd and ssh-agent services to start automatically.
 
-#### :arrow_right_hook: Start the sshd and ssh-agent services
+#### :arrow_right_hook: Start the sshd and ssh-agent services:
 ```
 Start-Service sshd
 ```
 ```
 Start-Service ssh-agent
 ```
-#### :arrow_right_hook: Check ssh-agent is running
+#### :arrow_right_hook: Check ssh-agent is running:
 ```
 Get-Service ssh-agent
 ```
@@ -134,7 +128,7 @@ Get-Service ssh-agent
 > + This setup and configurations for Windows are for [ssh-agent] to securely store the private keys within Windows security context, associated with Windows account
 > + And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
 > + By default the [ssh-agent] service is disabled
-
+>
 #### :arrow_right_hook: Load private key onto [ssh-agent]
 
 ```
