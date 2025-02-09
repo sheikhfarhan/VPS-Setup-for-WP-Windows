@@ -151,7 +151,6 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 #### :arrow_right_hook: Password-less SSH
 + For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature
 + If not, deploy with root password
-+ If add an SSH key, no root credentials will be sent via email
 
 ![image](https://drive.google.com/uc?export=view&id=13DVacST8KJNqqWrJv9beCkuZdujufuAu)
 
