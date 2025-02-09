@@ -372,10 +372,10 @@ sudo systemctl restart ssh.service
 
 #### :arrow_right_hook: Verify new SSH port number is listening:
 ```
-sudo ss -tulm
+sudo lsof -i tcp:22022
 ```
 
-![image](https://drive.google.com/uc?export=view&id=15MF9ssfpgB-gYTX1bmrJ2_w4Ce8PWsGJ)
+![image](https://drive.google.com/uc?export=view&id=1-cchi4xBJxn73l_h2ffXAnjaimz8tDng)
 
 > [!IMPORTANT]
 > Before logging off, need to allow the new port in UFW (Firewall) settings and add new port info in Windows SSH config file\
