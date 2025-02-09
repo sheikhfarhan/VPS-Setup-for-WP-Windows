@@ -1,8 +1,8 @@
 # Intro
 
-For the past years, I have been deploying many VPSs for varied use cases. I thought it was time to document the steps I use for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
+I have been deploying many VPSs for varied use cases and wanted to finally document the steps I take for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
-I want to set up a Wordpress website using a free control panel for this project. Been using Cloudpanel (taking advantage of the 1-click installation of Wordpress and Sites' Management features)  and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use-case/requirements and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+I want to set up a WordPress website for this project using a free control panel. Been using Cloudpanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use case/requirements, and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
 These steps/guides are with the below stacks/environments:
 
@@ -13,7 +13,8 @@ These steps/guides are with the below stacks/environments:
 + VPS - 2vCore and 2GB Ram
 + Ubuntu 24.04 OS 
 + DNS management via Cloudflare (+ Origin Certificates issuance)
-+ Cloudpanel as the control panel under reverse proxy (to achieve clp.domain.com as my panel's login)
++ Cloudpanel as websites control panel
++ CloudPanel Login page under reverse proxy (to achieve clp.domain.com as my panel's login)
 + Cloudpanel default stack is LEMP (Nginx)
 + Installation of Wordpress (hardened)
 
@@ -28,7 +29,7 @@ This page is where the entire steps are, but for specific sections/parts of the 
 + Part 5 - CloudPanel Setup
 + Part 6 - Install & Securing Wordpress
 
-## Select a VPS (Virtual Private Server) Provider
+## Selecting a VPS (Virtual Private Server) Provider
 
 Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
