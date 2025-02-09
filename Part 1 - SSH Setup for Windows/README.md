@@ -1,6 +1,6 @@
 ## Part 1 - SSH Setup for Windows
 
-#### :arrow_right_hook: Install Powershell 7.5.x
+### :arrow_right_hook: Install Powershell 7.5.x
 
 + Installing Powershell 7.5.x from Windows Store
 + Other methods of installation and guide here:
@@ -9,7 +9,7 @@ https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powers
 
 ![image](https://drive.google.com/uc?export=view&id=130cV5uuvJmtIihQX7jkdeLXtvQ2g4uOT)
 
-#### :arrow_right_hook: Generate Keys via PowerShell
+### :arrow_right_hook: Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
@@ -17,7 +17,7 @@ ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 
 ![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
-#### :arrow_right_hook: Check Windows User ~/.ssh folder
+### :arrow_right_hook: Check Windows User ~/.ssh folder
 
 ![image](https://drive.google.com/uc?export=view&id=135mjes1PrPOyMhpw_DBJEWFcAr7RG7Vk)
 
@@ -28,13 +28,13 @@ ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 
 **_All keys are autosave to: C:/Users/{user}/.ssh folder_**
 
-#### :arrow_right_hook: Enable OpenSSH in Windows
+### :arrow_right_hook: Enable OpenSSH in Windows
 
 Go to System -> Optional Features -> Add OpenSSH
 
 ![image](https://drive.google.com/uc?export=view&id=1-XfrWohXqF5buyT7Y6m7HR5xIyvGhpre)
 
-#### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
+### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
 
 Open PowerShell as _Administrator_
 
@@ -48,14 +48,14 @@ Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
 These will set the sshd and ssh-agent services to start automatically.
 
-#### :arrow_right_hook: Start the sshd and ssh-agent services:
+### :arrow_right_hook: Start the sshd and ssh-agent services:
 ```
 Start-Service sshd
 ```
 ```
 Start-Service ssh-agent
 ```
-#### :arrow_right_hook: Check ssh-agent is running:
+### :arrow_right_hook: Check ssh-agent is running:
 ```
 Get-Service ssh-agent
 ```
@@ -66,7 +66,8 @@ Get-Service ssh-agent
 > + And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
 > + By default the [ssh-agent] service is disabled
 >
-#### :arrow_right_hook: Load private key onto [ssh-agent]
+
+### :arrow_right_hook: Load private key onto [ssh-agent]
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
