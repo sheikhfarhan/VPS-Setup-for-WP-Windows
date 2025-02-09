@@ -696,7 +696,7 @@ Go to Settings and configure accordingly:
 cp clp /home/$User/htdocs/$domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/
 ```
 
-![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
+![image](https://drive.google.com/uc?export=view&id=10OV3CymScG5yY4Ph-5e676SDnuk_AElD)
 
 _$User = Admin Username for the website over at CloudPanel_
 
