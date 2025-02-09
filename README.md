@@ -29,7 +29,7 @@ This page is where the entire steps are, but for specific sections/parts of the 
 + Part 5 - CloudPanel Setup
 + Part 6 - Install & Securing Wordpress
 
-## Selecting a VPS (Virtual Private Server) Provider
+### Selecting a VPS (Virtual Private Server) Provider
 
 Shortlisted options are all with SG-located datacenter. Going for a minimum of 2GB Ram.
 
@@ -55,9 +55,10 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d\
 
 For the production-ready site, may go for somewhere else or stick to DO, will see..
 
-## Install Powershell 7.5.x
+### Install Powershell 7.5.x
 
-+ Install Powershell 7.5.x from Windows Store
++ Primarily using Windows Terminal
++ Installing Powershell 7.5.x from Windows Store
 + Other methods of installation and guide here:
 https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
 + Start PowerShell
@@ -68,7 +69,7 @@ Allright, Lets go!
 
 ## Part 1 - SSH Setup for Windows
 
-### :arrow_right_hook: Generate Keys via PowerShell
+#### :arrow_right_hook: Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
@@ -77,7 +78,7 @@ _Passphrase: xxxxxx_
 
 ![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
-### :arrow_right_hook: Check Windows User ~/.ssh folder
+#### :arrow_right_hook: Check Windows User ~/.ssh folder
 
 ```
 ls
@@ -92,13 +93,13 @@ ls
 
 **_All keys are autosave to: C:/Users/{user}/.ssh folder_**
 
-### :arrow_right_hook: Enable OpenSSH in Windows
+#### :arrow_right_hook: Enable OpenSSH in Windows
 
 Go to System -> Optional Features -> Add OpenSSH
 
 ![image](https://drive.google.com/uc?export=view&id=1-XfrWohXqF5buyT7Y6m7HR5xIyvGhpre)
 
-### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
+#### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
 
 Open PowerShell as _Administrator_ and enter:
 
@@ -112,14 +113,14 @@ Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
 These will set the sshd and ssh-agent services to start automatically
 
-### :arrow_right_hook: Start the sshd and ssh-agent services
+#### :arrow_right_hook: Start the sshd and ssh-agent services
 ```
 Start-Service sshd
 ```
 ```
 Start-Service ssh-agent
 ```
-### :arrow_right_hook: Check ssh-agent is running
+#### :arrow_right_hook: Check ssh-agent is running
 ```
 Get-Service ssh-agent
 ```
@@ -130,7 +131,7 @@ Get-Service ssh-agent
 > + And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
 > + By default the [ssh-agent] service is disabled
 
-### :arrow_right_hook: Load private key onto [ssh-agent]
+#### :arrow_right_hook: Load private key onto [ssh-agent]
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
@@ -142,12 +143,12 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 > + If need be, can create new set of keys for each devices (Tablet, Phone) to SSH in.
 > + Then standby to add those public keys onto the server when ready.
 
-:desktop_computer:	Windows is ready to remotely SSH to our VPS when ready!\
-Lets now go over to our VPS Provider side of things.. 
+### :desktop_computer:	Windows is ready to remotely SSH to our VPS when ready!
+#### Lets now go over to our VPS Provider side of things.. 
 
 ## Part 2 - VPS Setup & LogIn
 
-### :arrow_right_hook: Password-less SSH
+#### :arrow_right_hook: Password-less SSH
 + For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature
 + If not, deploy with root password
 + If add an SSH key, no root credentials will be sent via email
@@ -156,7 +157,7 @@ Lets now go over to our VPS Provider side of things..
 
 For Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key"
 
-### :arrow_right_hook: After adding public key:
+#### :arrow_right_hook: After adding public key:
 
 ![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
@@ -164,13 +165,13 @@ For Digital Ocean, the settings are under "My Account" -> "Manage Team Settings"
 
 When creating server, now will have option to add the public key for a password-less entry
 
-### :arrow_right_hook: Server created!
+#### :arrow_right_hook: Server created!
 
 ![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
 Now going back to Windows to add the IP address to an SSH Config file...
 
-### :arrow_right_hook: Create new Config file for User
+#### :arrow_right_hook: Create new Config file for User
 
 Run Powershell as **Administrator** and navigate to .ssh folder and create the file.
 ```
@@ -184,7 +185,7 @@ or
 New-Item config
 ```
 
-### :arrow_right_hook: Add the following to the config file:
+#### :arrow_right_hook: Add the following to the config file:
 ```
 # this is main user access
 Host dosvr2
@@ -204,7 +205,7 @@ Host dosvr2
 
 Save file and Exit terminal
 
-### :arrow_right_hook: SSH via root access:
+#### :arrow_right_hook: SSH via root access:
 
 From Powershell:
 ```
@@ -213,34 +214,36 @@ ssh root@dosvr2
 
 ![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
 
-:white_check_mark: **And we are in!**\
-Lets secure our VPS next..
+### :white_check_mark: And we are in!
+### :white_check_mark: Lets secure our VPS next..
 
-## Part 3 - Housekeeping & Hardening of VPS
+## Part 3 - Hardening of VPS
+
+## Housekeeping
 ```
-apt update && apt upgrade
+apt update && apt upgrade -y
 ```
 ```
-apt autoremove && apt autoclean
+apt autoremove && apt autoclean -y
 ```
 
-### :arrow_right_hook: Reboot server (and log back in to continue)
+#### :arrow_right_hook: Reboot server (and log back in to continue)
 ```
 shutdown -r now
 ```
 
-### :arrow_right_hook: Change System Time / Time Zone:
+#### :arrow_right_hook: Change System Time / Time Zone:
 ```
 dpkg-reconfigure tzdata
 ```
 Follow on screen instructions to set timezone. 
 
-### :arrow_right_hook: Restart cron to ensure system picks up the change
+#### :arrow_right_hook: Restart cron to ensure system picks up the change
 ```
 service cron restart
 ```
 
-### :arrow_right_hook: Disable unattended-upgrades:
+#### :arrow_right_hook: Disable unattended-upgrades:
 ```
 dpkg-reconfigure unattended-upgrades
 ```
@@ -248,7 +251,7 @@ or can remove it completely:
 ```
 apt remove unattended-upgrades
 ```
-### :arrow_right_hook: Check SSH authorized_keys file
+#### :arrow_right_hook: Check SSH authorized_keys file
 
 Ensure that the 2 public keys are in the /root/.ssh folder
 
@@ -256,7 +259,7 @@ Ensure that the 2 public keys are in the /root/.ssh folder
 
 If not..
 
-### :arrow_right_hook: Create folders for .ssh and a file for authorized_keys:
+#### :arrow_right_hook: Create folders for .ssh and a file for authorized_keys:
 ```
 cd /root
 mkdir .ssh
@@ -267,18 +270,18 @@ nano authorized_keys
 Then put the relevant public keys in here.\
 If need to add additional public keys (eg: for Laptop/Tablet/Phone devices entry points), can add them in now.
 
-### :arrow_right_hook: Setup ownership and permissions:
+#### :arrow_right_hook: Setup ownership and permissions:
 ```
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 chown -R root:root ~/.ssh
 ```
-### :arrow_right_hook: Restart SSH service
+#### :arrow_right_hook: Restart SSH service
 ```
 systemctl restart ssh
 ```
 
-### :arrow_right_hook: Restart the sshd daemon, still as root, with:
+#### :arrow_right_hook: Restart the sshd daemon, still as root, with:
 ```
 systemctl restart ssh.service
 ```
@@ -286,22 +289,22 @@ systemctl restart ssh.service
 > [!Note]
 > All users (root and other users) all share the same config in /etc/ssh/sshd_config, but they don't all share the same 'authorized_keys' files. Thus, even when using same set of keys, need a separate authorized_keys file in /root/.ssh/ and for in /home/yournameuser/.ssh/ but in this case contains same set of public keys_
 
-### :arrow_right_hook: Create New Sudo user
+#### :arrow_right_hook: Create New Sudo user
 ```
 adduser <user>
 usermod -aG sudo <user>
 ```
 
-### :arrow_right_hook: Create the .ssh folder for new sudo user:
+#### :arrow_right_hook: Create the .ssh folder for new sudo user:
 ```
 mkdir /home/{user}/.ssh
 ```
-### :arrow_right_hook: Copy the authorized_keys file that contains the public keys:
+#### :arrow_right_hook: Copy the authorized_keys file that contains the public keys:
 ```
 cp /root/.ssh/authorized_keys /home/{user}/.ssh/authorized_keys
 ```
 
-### :arrow_right_hook: Setup ownership and permissions:
+#### :arrow_right_hook: Setup ownership and permissions:
 ```
 chown -R {user}:{user} /home/{user}/.ssh
 chmod 700 /home/{user}/.ssh
@@ -309,13 +312,13 @@ chmod 600 /home/{user}/.ssh/authorized_keys
 ```
 **_Now the new sudo user has the public keys in their own authorized_keys file_**
 
-### :arrow_right_hook: Restart ssh
+#### :arrow_right_hook: Restart ssh
 ```
 systemctl restart ssh
 systemctl restart ssh.service
 ```
 
-### :arrow_right_hook: SSH in via sudo user
+#### :arrow_right_hook: SSH in via sudo user
 
 Open **NEW** Powershell terminal:
 ```
@@ -328,19 +331,18 @@ The "dosvr2" is what we defined in the Windows side of things /.ssh config file 
 
 Test a few sudo commands to ensure all is okay, then next step is to disable root login, securing SSH access and implement UFW and Fail2ban
 
-### :arrow_right_hook: Securing SSH Accecss
+## Securing SSH Accecss
 
-The idea is to:
 + Change SSH port from 22 to another (here I am using 22022)
 + Disable RootLogin
 + Disable entry points via Passwords (only SSH keys)
 
-### :arrow_right_hook: Backup original config file
+#### :arrow_right_hook: Backup original config file
 ```
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 ```
 
-### :arrow_right_hook: Make changes to file
+#### :arrow_right_hook: Make changes to file
 ```
 sudo vim /etc/ssh/sshd_config
 ```
@@ -352,7 +354,7 @@ PasswordAuthentication no
 ```
 Save And Close file
 
-### :arrow_right_hook: Restart Services for changes to take effect
+#### :arrow_right_hook: Restart Services for changes to take effect
 ```
 sudo systemctl restart ssh
 ```
@@ -361,13 +363,13 @@ To activate this new config, it is now required **to inform systemd about the ch
 sudo systemctl daemon-reload
 ```
 
-### :arrow_right_hook: ssh service and socket can be restarted, to **activate the change**:
+#### :arrow_right_hook: ssh service and socket can be restarted, to **activate the change**:
 ```
 sudo systemctl restart ssh.socket
 sudo systemctl restart ssh.service
 ```
 
-### :arrow_right_hook: Verify new SSH port number is listening:
+#### :arrow_right_hook: Verify new SSH port number is listening:
 ```
 sudo ss -tulm
 ```
@@ -378,39 +380,41 @@ sudo ss -tulm
 > Before logging off, need to allow the new port in UFW (Firewall) settings and add new port info in Windows SSH config file\
 > Do not close the existing session! and continue next steps
 
-### :arrow_right_hook: Add Rules in UFW
+## UFW
 
 _UFW is already pre-installed with Ubuntu 24.04 but disabled._
+
+#### :arrow_right_hook: Enable UFW
 
 ```
 sudo ufw enable
 ```
 _can proceed if system asks to_
 
-### :arrow_right_hook: Check UFW is running
+#### :arrow_right_hook: Check UFW is running
 ```
 sudo ufw status
 ```
 
-### :arrow_right_hook: Establish Default Rule
+#### :arrow_right_hook: Establish Default Rule
 ```
 sudo ufw default allow outgoing
 sudo ufw default deny incoming
 ```
 
-### :arrow_right_hook: Allow new SSH port
+#### :arrow_right_hook: Allow new SSH port
 ```
 sudo ufw allow 22022/tcp
 ```
 
-### :arrow_right_hook: Add other basic rules for UFW
+#### :arrow_right_hook: Add other basic rules for UFW
 ```
 sudo ufw allow http/tcp 
 sudo ufw allow https/tcp
 sudo ufw logging off # or sudo vim /etc/ufw/ufw.conf (LOGLEVEL=off).
 ```
 
-### :arrow_right_hook: Check UFW rules
+#### :arrow_right_hook: Check UFW rules
 ```
 sudo UFW status
 ```
@@ -420,7 +424,7 @@ sudo UFW status
 > [!NOTE]
 > Will need to add the port info during Cloudpanel's installation process, as its default port is 22
 
-### :arrow_right_hook: Add new SSH port in Window's SSH config file:
+#### :arrow_right_hook: Add new SSH port in Window's SSH config file:
 
 Open the config file via Notepad and add the port info. File is at C:/Users/{user}/.ssh/config
 ```
@@ -437,34 +441,33 @@ Save file
 > [!IMPORTANT]
 > Before logging off, Start a new terminal to SSH in to test
 
-### :arrow_right_hook: Open new terminal (without closing the current session)
+#### :arrow_right_hook: Open new terminal (without closing the current session)
 
 Log-in server as usual without the need to specify port info:
 
 ![image](https://drive.google.com/uc?export=view&id=15RGq_uH_yiBnISAQmnYGUTnaFtz-9Vjj)
 
-### :arrow_right_hook: Install Fail2ban
+## Fail2ban
+
+#### :arrow_right_hook: Install Fail2ban
 ```
 sudo apt-get update
 sudo apt-get install fail2ban -y
 ```
 
-### :arrow_right_hook: Check Fail2ban status
+#### :arrow_right_hook: Check Fail2ban status
 ```
 sudo /etc/init.d/fail2ban status
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=15RRASwdVI7NcwkFTTUT34pRiXfYjDKP5)
 
-### :arrow_right_hook: Create new jail.local file
+#### :arrow_right_hook: Create new jail.local file
 ```
 sudo touch /etc/fail2ban/jail.local
 ```
 
-> [!NOTE]
-> Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problems when upgrading.
-
-### :arrow_right_hook: Edit the file:
+#### :arrow_right_hook: Edit the file:
 ```
 sudo nano /etc/fail2ban/jail.local
 ```
@@ -486,7 +489,10 @@ maxretry = 3
 
 ![image](https://drive.google.com/uc?export=view&id=14pDUHgIp9L7Fkuzqk4ZsNyhlU7jwHrh_)
 
-### :arrow_right_hook: Restart Fail2ban
+> [!NOTE]
+> Every .conf file can be overridden with a file named .local. The .conf file is read first, then .local, with later settings overriding earlier ones. Thus, a .local file doesn't have to include everything in the corresponding .conf file, only those settings that you wish to override. Modifications should take place in the .local and not in the .conf. This avoids merging problems when upgrading.
+
+#### :arrow_right_hook: Restart Fail2ban
 ```
 sudo systemctl restart fail2ban
 sudo service fail2ban restart
@@ -498,24 +504,24 @@ sudo service fail2ban restart
 > sudo apt install python3-systemd
 > ```
 
-#### Check the new rules by:
+#### :arrow_right_hook: Check the new rules by:
 ```
 sudo iptables -S
 sudo iptables -L
 ```
 
-#### To Check Bans/Jails
+#### :arrow_right_hook: To Check Bans/Jails
 ```
 sudo fail2ban-client status sshd
 ```
 
-#### Check if loggings are working fine:
+#### :arrow_right_hook: Check if loggings are working fine:
 ```
 tail -f /var/log/auth.log
 tail -f /var/log/fail2ban.log
 ```
 
-### :+1: **VPS is ready!**
+### :+1: VPS is ready!
 + For easy and secured entry from a Windows setup
 + Ready to install applications at will
 + Next Step is to go over to our Cloudflare account for the DNS and SSLs
