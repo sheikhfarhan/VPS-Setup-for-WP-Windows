@@ -55,3 +55,5 @@ Add: Custom SSH Port - 22022 - ip6: ::/0
 
 **Last few steps are to install WordPress and layer some basic WP securities**
 
++ [Part 6 - Install & Securing Wordpress](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/038d6787c8ee29716a7a27709c95795d7431b5ee/Part%206%20-%20Install%20%26%20Securing%20Wordpress)
+
