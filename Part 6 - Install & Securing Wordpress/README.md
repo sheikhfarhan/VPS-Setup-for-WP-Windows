@@ -34,7 +34,7 @@ Credentials are as saved earlier in Cloudpanel:
 
 ### :arrow_right_hook: Install Security Plugins
 
-**1. Wordfence**
+## 1. Wordfence
 
 ### :arrow_right_hook: Use the scan feature
 
@@ -56,13 +56,13 @@ location ~ \.user\.ini$ {
 
 ![image](https://drive.google.com/uc?export=view&id=1-W7Xn8GxUf-QRim7TJLefBDGplbbS2Eg)
 
-**2. Limit Login Attempts Reloaded**
+## 2. Limit Login Attempts Reloaded
 
 ### :arrow_right_hook: Install and set accordingly:
 
 ![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
 
-**3. WP fail2ban – Advanced Security**
+## 3. WP fail2ban – Advanced Security
 
 WPf2b comes with three fail2ban filters that we need:\
   wordpress-hard.conf\
