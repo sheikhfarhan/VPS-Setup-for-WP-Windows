@@ -26,7 +26,7 @@ This page is where the entire steps are, but for specific sections/parts of the 
 
 + [Part 1 - SSH Setup for Windows](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/0ba0e4f94dd82047c42cae3570c38d2442edb446/Part%201%20-%20SSH%20Setup%20for%20Windows)
 + [Part 2 - VPS Setup & Login](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7bba3df18687e83050f6ff069572945b359a29ed/Part%202%20-%20VPS%20Setup%20%26%20Login)
-+ Part 3 - Hardening: SSH, UFW & Fail2ban
++ [Part 3 - Hardening: SSH, UFW & Fail2ban](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7e6ed911d2dcf3df306ed4127203f2b7866c91a6/Part%203%20-%20Hardening%3A%20SSH%2C%20UFW%20%26%20Fail2ban)
 + Part 4 - Cloudflare, SSLs & DNS Setup
 + Part 5 - CloudPanel Setup
 + Part 6 - Install & Securing Wordpress
