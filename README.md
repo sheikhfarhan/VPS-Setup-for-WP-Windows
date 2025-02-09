@@ -538,7 +538,7 @@ Go to Domain Registrar and add Cloudflare's given nameservers
 
 ![image](https://drive.google.com/uc?export=view&id=14pLjdHOKozSED2eVMWjopYNb69k1Bm9b)
 
-#### :arrow_right_hook: Adding A & CNAME records
+#### :arrow_right_hook: Adding A & CNAME records for domain
 
 ![image](https://drive.google.com/uc?export=view&id=153-rR06znAnvLD67EgRvgoNM1MkaSM2w)
 
@@ -549,6 +549,8 @@ Go to Domain Registrar and add Cloudflare's given nameservers
 #### :arrow_right_hook: Switch to Full (Strict) mode
 
 SSL/TLS -> Overview -> Configure
+
+![image](https://drive.google.com/uc?export=view&id=1-jeIhfHYPGM-BvZVWfdL2Ba89uNhXZlh)
 
 #### :arrow_right_hook: Create CF Certificate
 
