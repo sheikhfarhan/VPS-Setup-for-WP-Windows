@@ -2,7 +2,9 @@
 
 I have been deploying many VPSs for varied use cases and wanted to finally document the steps I take for my reference. The idea is to spin up a VPS, layer adequate security, and allow me easy access to the server from my Home PC (Windows 11) and other devices.
 
-I want to set up a WordPress website for this project using a free control panel. Been using Cloudpanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use case/requirements, and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
+For this project, I want to set up a WordPress website and using a free control panel. Been using Cloudpanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use case/requirements.
+
+And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
 #### Current stacks/environments:
 
@@ -66,6 +68,8 @@ https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powers
 ![image](https://drive.google.com/uc?export=view&id=130cV5uuvJmtIihQX7jkdeLXtvQ2g4uOT)
 
 Allright, Lets go!
+
+<p>&nbsp;</p>
 
 ## Part 1 - SSH Setup for Windows
 
@@ -144,9 +148,11 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 > + Then standby to add those public keys onto the server when ready.
 
 ### :desktop_computer:	Windows is ready to remotely SSH to our VPS when ready!
-#### Lets now go over to our VPS Provider side of things.. 
+**Lets now go over to our VPS Provider side of things..**
 
-## Part 2 - VPS Setup & LogIn
+<p>&nbsp;</p>
+
+## Part 2 - VPS Deployment & LogIn
 
 #### :arrow_right_hook: Password-less SSH
 + For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature
@@ -169,7 +175,7 @@ When creating server, now will have option to add the public key for a password-
 
 ![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
-Now going back to Windows to add the IP address to an SSH Config file...
+### Now going back to Windows to add the IP address to a Config file:
 
 #### :arrow_right_hook: Create new Config file for User
 
@@ -196,10 +202,9 @@ Host dosvr2
 ![image](https://drive.google.com/uc?export=view&id=154olKi795BjFPCaSBd_5mFFkVV7GHUbw)
 
 > [!Note]
-> + We did rename the key to some other name than the default names (id_rsa etc..) - useful to add some config info for Windows
 > + Can replace Host (which is an alias, sort of shortcut name) to anything
 > + Hostname is usually IP address or domain
-> + IdentityFile is the path to the private keys
+> + IdentityFile is the path to the private keys, as we did rename the key to some other name the default
 > + Can use Notepad to open and edit the config file from Windows Explorer
 > + To use the same config file and configure change of SSH port later
 
@@ -215,7 +220,9 @@ ssh root@dosvr2
 ![image](https://drive.google.com/uc?export=view&id=15GZ3Ryo9EztTYIfhO5RLxUkLlz2DX6wa)
 
 ### :white_check_mark: And we are in!
-### :white_check_mark: Lets secure our VPS next..
+**Lets secure our VPS next.**
+
+<p>&nbsp;</p>
 
 ## Part 3 - Hardening of VPS
 
@@ -521,20 +528,23 @@ tail -f /var/log/auth.log
 tail -f /var/log/fail2ban.log
 ```
 
-### :+1: VPS is ready!
-+ For easy and secured entry from a Windows setup
-+ Ready to install applications at will
-+ Next Step is to go over to our Cloudflare account for the DNS and SSLs
+### :+1: VPS is harderned and is ready for:
++ Easy and secured entry from a Windows setup
++ Installation of applications at will
+
+**Next Step is to go over to our Cloudflare account for the DNS and SSLs**
+
+<p>&nbsp;</p>
 
 ## Part 4 - Cloudflare Setup
 
-#### Point Nameservers to Cloudflare
+#### :arrow_right_hook: Point Nameservers to Cloudflare
 
-Go to Domain Registrar and add Cloudflare's given nameservers in:
+Go to Domain Registrar and add Cloudflare's given nameservers
 
 ![image](https://drive.google.com/uc?export=view&id=14pLjdHOKozSED2eVMWjopYNb69k1Bm9b)
 
-#### Adding A & CNAME records for main domain & for CloudPanel log-in page
+#### :arrow_right_hook: Adding A & CNAME records
 
 ![image](https://drive.google.com/uc?export=view&id=153-rR06znAnvLD67EgRvgoNM1MkaSM2w)
 
@@ -542,11 +552,11 @@ Go to Domain Registrar and add Cloudflare's given nameservers in:
 > CloudPanel's log-in page will be clp.domain.com\
 > Do not proxy it through Cloudflare yet!
 
-#### Switch to Full (Strict) mode
+#### :arrow_right_hook: Switch to Full (Strict) mode
 
 SSL/TLS -> Overview -> Configure
 
-#### Create CF Certificate
+#### :arrow_right_hook: Create CF Certificate
 
 SSL/TLS -> Origin Server -> Create
 
@@ -554,38 +564,43 @@ SSL/TLS -> Origin Server -> Create
 
 Copy the two sets of keys somewhere. We will need them later. Once copied, click OK.
 
-## Installing a Control Panel
+<p>&nbsp;</p>
 
-We have a few choices - Cloudpanel, HestiaCP, Webadmin etc.. Here I am documenting the steps I take for using Cloudpanel for the Wordpress installation
+## Part 5 - Installing a Control Panel
 
- #### Install Cloud Panel
+We have a few choices - Cloudpanel, HestiaCP, Webadmin etc..\
+Here I am documenting the steps I take for using Cloudpanel for the WordPress installation
+
+ #### :arrow_right_hook: Install CloudPanel
  ```
 curl -sS https://installer.cloudpanel.io/ce/v2/install.sh -o install.sh && sudo bash install.sh --ssh_port 22022 
 ```
- https://www.cloudpanel.io/docs/v2/getting-started/other/
+
+https://www.cloudpanel.io/docs/v2/getting-started/other/
 
   _Since I have a different SSH port than the usual 22, will need to add that SSH part for the installation_
 
-#### Housekeeping
+#### :arrow_right_hook: Housekeeping
 ```
 apt-get autoremove && apt-get autoclean
 ```
 
-#### Log-in to Cloudpanel via:
+#### :arrow_right_hook: Log in to CloudPanel via:
 https://yourIpAddress:8443
 
-#### Firewall in Cloudpanel
-Admin Area -> Security
-Add: Custom SSH Port - 22022 - ip4: 0.0.0.0/0
+#### :arrow_right_hook: Firewall in CloudPanel
+
+Admin Area -> Security\
+Add: Custom SSH Port - 22022 - ip4: 0.0.0.0/0\
 Add: Custom SSH Port - 22022 - ip6: ::/0
 
 ![image](https://drive.google.com/uc?export=view&id=15j10ttzLrtfN5MSTBo9v07Ef8ifXgVAJ)
 
-#### Delete SSH Port 22 and summary as follows:
+#### :arrow_right_hook: Delete SSH Port 22 and summary as follows:
 
 ![image](https://drive.google.com/uc?export=view&id=15lBNoFNR8ThESjKIQs5z2-5eaWh4kPNZ)
 
-#### Setting up subdomain for Cloudpanel's log-in page
+#### :arrow_right_hook: Setting up a subdomain for CloudPanel's log-in page
 
 + Go to Sites and Create a Reverse Proxy 
 + Enter the Domain Name as clp.domain.com, enter https://127.0.0.1:8443 as Reverse Proxy Url.
@@ -604,47 +619,49 @@ Add: Custom SSH Port - 22022 - ip6: ::/0
 
 ![image](https://drive.google.com/uc?export=view&id=15wstwfoOh_CWaUqsgSXjxH2U_T1h_n7B)
 
-## **:+1: Server is hardened and Web Control Panel is ready**
+## **:+1: Server is hardened and our Control Panel is ready**
 
-##############  ####################
+**Last few steps are to install WordPress and layer some basic WP securities**
 
-## INSTALL WORDPRESS
+<p>&nbsp;</p>
 
-#### 1-click Wordpress Installation
+## Part 6 - INSTALL WORDPRESS
+
+#### :arrow_right_hook: 1-click Wordpress Installation
 
 ![image](https://drive.google.com/uc?export=view&id=1aei7zObzebNXOVBzG5fIi8SteQtsftEE)
 
-#### Copy and Save the generated Credentials
+#### :arrow_right_hook: Copy and Save the generated Credentials
 
 ![image](https://drive.google.com/uc?export=view&id=1-7kMQ8vO9o8AVcNC0iWVNScxjV5eGmka)
 
-#### Add Cloudflare's Certificate
+#### :arrow_right_hook: Add Cloudflare's Certificate
 
 ![image](https://drive.google.com/uc?export=view&id=1-8BTHuaQZZ-qpnnyqxjFMonCTHuNFFcN)
 ![image](https://drive.google.com/uc?export=view&id=1-AG4hzUfCRjrsGx_EOKC1u_cNmSmEEvh)
 
-#### Add subdomain for the site in Cloudflare
+#### :arrow_right_hook: Add a subdomain for the site in Cloudflare
 
 ![image](https://drive.google.com/uc?export=view&id=1-CjJqVPhAWIXNB-hmEWdmpiCjraNyquR)
 
 #### Additional Settings:
 + Site -> Manage -> Security -> Allow traffic from Cloudflare only
-+ Site -> Manage -> Settings -> Adjust PHP Settings and Add SSH Keys for SSH/SFTP (though CloudPanel already have a decent file manager in-built)
++ Site -> Manage -> Settings -> Adjust PHP Settings and Add SSH Keys for SSH/SFTP (though CloudPanel already has a decent file manager in-built)
 + Can start tweaking any web-related settings where makes sense!
 
-#### Wordpress/Website is Live!
+### Wordpress/Website is Live!
 
 ![image](https://drive.google.com/uc?export=view&id=1-IE_KZnigr1iEN3vLUz7UGyonJON-r0f)
 
-#### Login to WP-Admin @ domain.com/wp-admin
+#### :arrow_right_hook: Login to WP-Admin @ domain.com/wp-admin
 
 Credentials are as per saved earlier in Cloudpanel
 
-#### Install Security Plugins
+#### :arrow_right_hook: Install Security Plugins
 
 **Wordfence**
 
-Scan and if they found a file that needs to hide but unable to hide at UI level eg:
+Scan and if they found a file that needs to hide but is unable to hide at UI level eg:
 
 ![image](https://drive.google.com/uc?export=view&id=1-Rn_VrF9rJIT_4jGwXZDtu-B-t3Y_6h3)
 
