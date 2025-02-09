@@ -653,7 +653,9 @@ Add: Custom SSH Port - 22022 - ip6: ::/0
 
 #### :arrow_right_hook: Login to WP-Admin @ domain.com/wp-admin
 
-Credentials are as per saved earlier in Cloudpanel
+Credentials are as saved earlier in Cloudpanel:
+
+![image](https://drive.google.com/uc?export=view&id=1-zoDDEHORKhmxgxglL0scEl2dxc8Fh6G)
 
 #### :arrow_right_hook: Install Security Plugins
 
@@ -675,9 +677,13 @@ Try another scan and should be cleared of the notification:
 
 **Limit Login Attempts Reloaded**
 
+Go to Settings and configure accordingly:
+
+![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
+
 **WP fail2ban – Advanced Security**
 
-_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf. Will add these in 
+_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf._
 
 Explore the plugin conf files at htdocs. find the appropriate conf file to copy over to fail2ban filter.d directory
 
