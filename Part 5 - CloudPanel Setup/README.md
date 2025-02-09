@@ -56,4 +56,4 @@ _https://clp.domain.com will now bring to CloudPanel login page with SSL_
 
 **Last few steps are to install WordPress and layer some basic WP securities**
 
-+ [Part 6 - Install & Securing Wordpress](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/e2b13ba3b7c4a6d4744941e2b579916ee0c12b9e/Part%206%20-%20Install%20%26%20Securing%20Wordpress)
++ [Part 6 - Install & Securing Wordpress](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/main/Part%206%20-%20Install%20%26%20Securing%20Wordpress)
