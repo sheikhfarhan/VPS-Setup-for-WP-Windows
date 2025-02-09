@@ -193,10 +193,10 @@ Host dosvr2
     Identityfile C:/Users/{user}/.ssh/sfarhan-key
 ```
 
-![image](https://drive.google.com/uc?export=view&id=154olKi795BjFPCaSBd_5mFFkVV7GHUbw)
+![image](https://drive.google.com/uc?export=view&id=1-alnvO48gcScLHyvDkcfMO7KfKTyemzt)
 
 > [!Note]
-> + Can replace Host (which is an alias, sort of shortcut name) to anything
+> + Host (which is an alias, sort of shortcut name for Windows/ssh-agent) can be anything
 > + Hostname is usually IP address or domain
 > + IdentityFile is the path to the private keys, as we did rename the key to some other name than the default
 > + Can use Notepad to open and edit the config file from Windows Explorer
