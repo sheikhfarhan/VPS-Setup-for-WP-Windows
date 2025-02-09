@@ -310,4 +310,4 @@ tail -f /var/log/fail2ban.log
 
 **Next Step is to go over to our Cloudflare account for the DNS and SSLs**
 
-+ [Part 4 - Cloudflare, SSLs & DNS Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/107e227a9c97bae2b495950825859af4c7d3b030/Part%204%20-%20Cloudflare%2C%20SSLs%20%26%20DNS%20Setup)
++ [Part 4 - Cloudflare, SSLs & DNS Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/main/Part%204%20-%20Cloudflare%2C%20SSLs%20%26%20DNS%20Setup)
