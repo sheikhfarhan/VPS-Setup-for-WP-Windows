@@ -28,4 +28,4 @@ SSL/TLS -> Origin Server -> Create
 
 Copy the two sets of keys somewhere. We will need them later. Once copied, click OK.
 
-+ [Part 5 - CloudPanel Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-
++ [Part 5 - CloudPanel Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/main/Part%205%20-%20CloudPanel%20Setup)
