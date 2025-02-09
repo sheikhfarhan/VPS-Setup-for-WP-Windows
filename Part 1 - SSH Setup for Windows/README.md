@@ -81,4 +81,5 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 ### :desktop_computer:	Windows is ready to remotely SSH to our VPS when ready!
 **Lets now go over to our VPS Provider side of things..**
 
++ [Part 2 - VPS Setup & Login](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7bba3df18687e83050f6ff069572945b359a29ed/Part%202%20-%20VPS%20Setup%20%26%20Login)
 
