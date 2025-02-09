@@ -20,17 +20,6 @@ And if these steps can help others navigate their DIY adventures, that would be 
 + Cloudpanel default stack is LEMP (Nginx)
 + Installation of Wordpress (hardened)
 
-## Win 11 + VPS + Cloudpanel + Cloudflare + Wordpress Setup
-
-This page is where the entire steps are, but for specific sections/parts of the deployment, the shortcuts are:
-
-+ [Part 1 - SSH Setup for Windows](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/0ba0e4f94dd82047c42cae3570c38d2442edb446/Part%201%20-%20SSH%20Setup%20for%20Windows)
-+ [Part 2 - VPS Setup & Login](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7bba3df18687e83050f6ff069572945b359a29ed/Part%202%20-%20VPS%20Setup%20%26%20Login)
-+ [Part 3 - Hardening: SSH, UFW & Fail2ban](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7e6ed911d2dcf3df306ed4127203f2b7866c91a6/Part%203%20-%20Hardening%3A%20SSH%2C%20UFW%20%26%20Fail2ban)
-+ [Part 4 - Cloudflare, SSLs & DNS Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/4dbd8176e7e87ddba638db05f65eb5e608eebd9c/Part%204%20-%20Cloudflare%2C%20SSLs%20%26%20DNS%20Setup)
-+ [Part 5 - CloudPanel Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/f06f445edc8800c353c8df2b617031019a3303c8/Part%205%20-%20CloudPanel%20Setup)
-+ [Part 6 - Install & Securing Wordpress](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/038d6787c8ee29716a7a27709c95795d7431b5ee/Part%206%20-%20Install%20%26%20Securing%20Wordpress)
-
 ### Selecting a VPS (Virtual Private Server) Provider
 
 Shortlisted providers are all with SG-located datacenter. Going for a minimum of 2GB Ram.
@@ -58,6 +47,17 @@ Get your free $200 credit here: https://m.do.co/c/97213212086d\
 For the production-ready site, may go for somewhere else or stick to DO, will see..
 
 Allright, Lets go!
+
+## Win 11 + VPS + Cloudpanel + Cloudflare + Wordpress Setup
+
+This page is where the entire steps are, but for specific sections/parts of the deployment, the shortcuts are:
+
++ [Part 1 - SSH Setup for Windows](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/0ba0e4f94dd82047c42cae3570c38d2442edb446/Part%201%20-%20SSH%20Setup%20for%20Windows)
++ [Part 2 - VPS Setup & Login](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7bba3df18687e83050f6ff069572945b359a29ed/Part%202%20-%20VPS%20Setup%20%26%20Login)
++ [Part 3 - Hardening: SSH, UFW & Fail2ban](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7e6ed911d2dcf3df306ed4127203f2b7866c91a6/Part%203%20-%20Hardening%3A%20SSH%2C%20UFW%20%26%20Fail2ban)
++ [Part 4 - Cloudflare, SSLs & DNS Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/4dbd8176e7e87ddba638db05f65eb5e608eebd9c/Part%204%20-%20Cloudflare%2C%20SSLs%20%26%20DNS%20Setup)
++ [Part 5 - CloudPanel Setup](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/f06f445edc8800c353c8df2b617031019a3303c8/Part%205%20-%20CloudPanel%20Setup)
++ [Part 6 - Install & Securing Wordpress](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/038d6787c8ee29716a7a27709c95795d7431b5ee/Part%206%20-%20Install%20%26%20Securing%20Wordpress)
 
 <p>&nbsp;</p>
 
