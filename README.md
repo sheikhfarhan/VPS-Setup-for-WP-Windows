@@ -661,23 +661,27 @@ Credentials are as saved earlier in Cloudpanel:
 
 **1. Wordfence**
 
-Scan and if they found a file that needs to hide but is unable to hide at UI level eg:
+#### :arrow_right_hook: Use the scan feature
+
+If they found a file that needs to hide but is unable to hide at UI level eg:
 
 ![image](https://drive.google.com/uc?export=view&id=1-Rn_VrF9rJIT_4jGwXZDtu-B-t3Y_6h3)
 
-Go to CloudPanel -> Site -> Manage -> Vhost and add:
+#### :arrow_right_hook: Go to CloudPanel -> Site -> Manage -> Vhost and add:
 
+```
 location ~ \.user\.ini$ {
-deny all;
+     deny all;
 }
+```
 
-Try another scan and should be cleared of the notification:
+#### :arrow_right_hook: Try another scan and should be cleared of the notification:
 
 ![image](https://drive.google.com/uc?export=view&id=1-W7Xn8GxUf-QRim7TJLefBDGplbbS2Eg)
 
 **2. Limit Login Attempts Reloaded**
 
-Go to Settings and configure accordingly:
+#### :arrow_right_hook: Go to Settings and configure accordingly:
 
 ![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
 
@@ -688,8 +692,7 @@ WPf2b comes with three fail2ban filters that we need:\
   wordpress-soft.conf\
   wordpress-extra.conf
 
-Explore the plugin's conf files at htdocs
-Find the appropriate conf file to copy over to server's fail2ban filter.d directory
+#### :arrow_right_hook: Explore the plugin's conf files at htdocs and find the appropriate conf file to copy over to server's fail2ban filter.d directory
 
 Via CLI:
 ```
@@ -707,13 +710,13 @@ open -> copy -> create respective files in /etc/fail2ban/filter.d/ -> paste:
 
 ![image](https://drive.google.com/uc?export=view&id=10Neu-zhD1tw5UEF8UHcPE4UipMwM8juj)
 
-Add the filters to jail.local to activate the ban:
+#### :arrow_right_hook: Add the filters to jail.local to activate the ban:
 
 ```
 vim /etc/fail2ban/jail.local
 ```
 
-Add the following:
+#### :arrow_right_hook: Add the following:
 ```
 [wordpress-hard]
 enabled = true
@@ -742,29 +745,31 @@ port = http,https
 
 Save file.
 
-Restart Fail2ban
+![image](https://drive.google.com/uc?export=view&id=10Wa0PY6PqOdgmBsL30oZX7OL1K1_u0ie)
+
+#### :arrow_right_hook: Restart Fail2ban
 ```
 sudo systemctl restart fail2ban
 ```
 
-Check logpath to see if Fail2ban's Jails are in action:
+#### :arrow_right_hook: Check logpath to see if Fail2ban's Jails are in action:
 ```
 sudo tail -f /var/log/fail2ban.log
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=10bkMEM4c3iXJZLY3dhKx2RYuTYdhVBm9)
 
-Looks good! 
+#### Looks good! 
 
 > [!NOTE]
 > Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
 > https://webdock.io/en/docs/how-guides/security-guides/how-configure-fail2ban-common-services
 
-:+1: All right, WordPress website is up and running, secured (relatively), with processes in place for ease of monitoring and tweaking. 
+##############
 
-################
+#### :+1: All right, WordPress website is up and running, WP-Admin is secured (relatively), with processes in place for ease of monitoring and tweaking.
 
-**Next is to get a theme going, and start the web building! Let me know if there are any issues/improvements with the above steps. Happy to check them out. And hopefully, if any is following the steps above, it has been helpful.. :)**
+**Let me know if there are any issues/improvements with the above steps. Happy to check them out. And hopefully, if any is following the steps above, it has been helpful.. :)**
 
 
 
