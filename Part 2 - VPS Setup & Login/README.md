@@ -68,4 +68,6 @@ ssh root@dosvr2
 ### :white_check_mark: And we are in!
 **Lets secure our VPS next.**
 
++ [Part 3 - Hardening: SSH, UFW & Fail2ban](https://github.com/sheikhfarhan/VPS-Setup-for-WP-Windows/tree/7e6ed911d2dcf3df306ed4127203f2b7866c91a6/Part%203%20-%20Hardening%3A%20SSH%2C%20UFW%20%26%20Fail2ban)
+
 
