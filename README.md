@@ -4,7 +4,7 @@ I have been deploying many VPSs for varied use cases and wanted to finally docum
 
 I want to set up a WordPress website for this project using a free control panel. Been using Cloudpanel (taking advantage of the 1-click installation of WordPress and Sites' Management features) and Cloudflare with no issues for a couple of years already. I am familiar with them, they provide what I need for my use case/requirements, and decided to use them for this project. And if these steps can help others navigate their DIY adventures, that would be great too! :)
 
-These steps/guides are with the below stacks/environments:
+#### Current stacks/environments:
 
 + Workstation/Client: Windows 11 PC
 + Terminal: Powershell 7.x
@@ -68,20 +68,21 @@ Allright, Lets go!
 
 ## Part 1 - SSH Setup for Windows
 
-### Generate Keys via PowerShell
+### :arrow_right_hook: Generate Keys via PowerShell
 
 ```
 ssh-keygen -t ed25519 -f C:/Users/{user}/.ssh/sfarhan-key -C ""
 ```
-Passphrase: xxxxxx
+_Passphrase: xxxxxx_
 
 ![image](https://drive.google.com/uc?export=view&id=13531RhTEtJX2wiwf-V-lk9U659fFpYFZ)
 
-### Check Windows User ~/.ssh folder
+### :arrow_right_hook: Check Windows User ~/.ssh folder
 
 ```
 ls
 ```
+
 ![image](https://drive.google.com/uc?export=view&id=135mjes1PrPOyMhpw_DBJEWFcAr7RG7Vk)
 
 > [!NOTE]
@@ -91,13 +92,13 @@ ls
 
 **_All keys are autosave to: C:/Users/{user}/.ssh folder_**
 
-### Enable OpenSSH in Windows
+### :arrow_right_hook: Enable OpenSSH in Windows
 
 Go to System -> Optional Features -> Add OpenSSH
 
 ![image](https://drive.google.com/uc?export=view&id=1-XfrWohXqF5buyT7Y6m7HR5xIyvGhpre)
 
-### Set up [sshd] & [ssh-agent] services
+### :arrow_right_hook: Set up [sshd] & [ssh-agent] services
 
 Open PowerShell as _Administrator_ and enter:
 
@@ -111,14 +112,14 @@ Get-Service ssh-agent | Set-Service -StartupType Automatic
 ```
 These will set the sshd and ssh-agent services to start automatically
 
-### Start the sshd and ssh-agent services
+### :arrow_right_hook: Start the sshd and ssh-agent services
 ```
 Start-Service sshd
 ```
 ```
 Start-Service ssh-agent
 ```
-### Check ssh-agent is running
+### :arrow_right_hook: Check ssh-agent is running
 ```
 Get-Service ssh-agent
 ```
@@ -129,7 +130,7 @@ Get-Service ssh-agent
 > + And to start the [ssh-agent] service each time the computer is rebooted (to start automatically)
 > + By default the [ssh-agent] service is disabled
 
-### Load private key onto [ssh-agent]
+### :arrow_right_hook: Load private key onto [ssh-agent]
 
 ```
 ssh-add $env:USERPROFILE\.ssh\sfarhan-key
