@@ -683,40 +683,37 @@ Go to Settings and configure accordingly:
 
 **3. WP fail2ban – Advanced Security**
 
-+ WPf2b comes with three fail2ban filters that we need:\
+WPf2b comes with three fail2ban filters that we need:\
   wordpress-hard.conf\
   wordpress-soft.conf\
-  wordpress-extra.conf.
+  wordpress-extra.conf
 
-+ Explore the plugin's conf files at htdocs
-+ Find the appropriate conf file to copy over to server's fail2ban filter.d directory
+Explore the plugin's conf files at htdocs
+Find the appropriate conf file to copy over to server's fail2ban filter.d directory
 
-+ Via CLI:
+Via CLI:
 ```
 cp clp /home/$User/htdocs/$domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/
 ```
+_and also the -soft and the -extra conf files_
 
-![image](https://drive.google.com/uc?export=view&id=10OV3CymScG5yY4Ph-5e676SDnuk_AElD)
+![image](https://drive.google.com/uc?export=view&id=10QUq8EVKGYwWfF-Qc6_hm3ItfVvpuq4r)
 
 _$User = Admin Username for the website over at CloudPanel_
 
-+ Via File Manager at CloudPanel (open -> copy -> paste):
+Or, via File Manager at CloudPanel:
+
+open -> copy -> create respective files in /etc/fail2ban/filter.d/ -> paste:
 
 ![image](https://drive.google.com/uc?export=view&id=10Neu-zhD1tw5UEF8UHcPE4UipMwM8juj)
 
-_and also the -soft and the -extra conf files_
+Add the filters to jail.local to activate the ban:
 
-+ add the filter to jail.local to activate the ban
-
+```
 vim /etc/fail2ban/jail.local
+```
 
-At jail.local conf file, under wordpress filters/jail header, Use /home/sf-wp-admin /logs and /home/adco-wp-admin
-
-exit
-
-Limit Login Attempts Reloaded
-
-#### Add these below after install WP Fail2ban plugin
+Add the following:
 ```
 [wordpress-hard]
 enabled = true
@@ -731,14 +728,15 @@ filter = wordpress-soft
 logpath = /var/log/auth.log
 maxretry = 3
 port = http,https                                                                                                                        
-
 [wordpress-extra]
 enabled = true
-filter = wordpress-soft
+filter = wordpress-extra
 logpath = /var/log/auth.log
 maxretry = 3
 port = http,https
 ```
+
+Save file.
 
 > [!NOTE]
 > Potentially can add new jails configs for Wordpress / MSQL / PHP / Nginx Bots etc…
