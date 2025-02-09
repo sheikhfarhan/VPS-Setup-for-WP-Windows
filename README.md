@@ -659,7 +659,7 @@ Credentials are as saved earlier in Cloudpanel:
 
 #### :arrow_right_hook: Install Security Plugins
 
-**Wordfence**
+**1. Wordfence**
 
 Scan and if they found a file that needs to hide but is unable to hide at UI level eg:
 
@@ -675,23 +675,38 @@ Try another scan and should be cleared of the notification:
 
 ![image](https://drive.google.com/uc?export=view&id=1-W7Xn8GxUf-QRim7TJLefBDGplbbS2Eg)
 
-**Limit Login Attempts Reloaded**
+**2. Limit Login Attempts Reloaded**
 
 Go to Settings and configure accordingly:
 
 ![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
 
-**WP fail2ban – Advanced Security**
+**3. WP fail2ban – Advanced Security**
 
-_WPf2b comes with three fail2ban filters that we need!: wordpress-hard.conf, wordpress-soft.conf, and wordpress-extra.conf._
++ WPf2b comes with three fail2ban filters that we need:\
+  wordpress-hard.conf\
+  wordpress-soft.conf\
+  wordpress-extra.conf.
 
-Explore the plugin conf files at htdocs. find the appropriate conf file to copy over to fail2ban filter.d directory
++ Explore the plugin's conf files at htdocs
++ Find the appropriate conf file to copy over to server's fail2ban filter.d directory
 
-clp /home/$User/htdocs/domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/ 
++ Via CLI:
+```
+cp clp /home/$User/htdocs/$domain.com/wp-content/plugins/wp-fail2ban/filters.d/wordpress-hard.conf /etc/fail2ban/filter.d/
+```
 
-and also the -soft and the -extra conf files
+![image](https://drive.google.com/uc?export=view&id=10H2jt7wFRRydK5cypKZUjqA6pH7KBsHs)
 
-add the filter to jail.local to activate the ban
+_$User = Admin Username for the website over at CloudPanel_
+
++ Via File Manager at CloudPanel (open -> copy -> paste):
+
+![image](https://drive.google.com/uc?export=view&id=10Neu-zhD1tw5UEF8UHcPE4UipMwM8juj)
+
+_and also the -soft and the -extra conf files_
+
++ add the filter to jail.local to activate the ban
 
 vim /etc/fail2ban/jail.local
 
