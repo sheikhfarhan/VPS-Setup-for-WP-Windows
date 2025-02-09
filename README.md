@@ -566,8 +566,8 @@ Copy the two sets of keys somewhere. We will need them later. Once copied, click
 
 ## Part 5 - Installing a Control Panel
 
-We have a few choices - Cloudpanel, HestiaCP, Webadmin etc..\
-Here I am documenting the steps I take for using Cloudpanel for the WordPress installation
+We have a few choices - CloudPanel, HestiaCP, Webadmin etc..\
+Here I am documenting the steps I take for using CloudPanel for the WordPress installation
 
  #### :arrow_right_hook: Install CloudPanel
  ```
