@@ -149,7 +149,7 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 ## Part 2 - VPS Deployment & LogIn
 
-#### :arrow_right_hook: Password-less SSH
+### :arrow_right_hook: Password-less SSH
 + For Digital Ocean, Hetzner, Vultr or any other VPS providers, if there is an option to “park” public keys at their console, use the feature
 + If not, deploy with root password
 
@@ -157,7 +157,7 @@ ssh-add $env:USERPROFILE\.ssh\sfarhan-key
 
 For Digital Ocean, the settings are under "My Account" -> "Manage Team Settings" -> "Security" -> "Add SSH Key":
 
-#### :arrow_right_hook: After adding public key:
+### :arrow_right_hook: After adding public key:
 
 ![image](https://drive.google.com/uc?export=view&id=13DlXEGmsVuoHIssaARsa7rmqV28DH6z8)
 
@@ -165,13 +165,13 @@ When creating server, now will have the option to add the public key for a passw
 
 ![image](https://drive.google.com/uc?export=view&id=13FmLD46ZIauh1qt87cei8jwHP0o8Fm0i)
 
-#### :arrow_right_hook: Server created!
+### :arrow_right_hook: Server created!
 
 ![image](https://drive.google.com/uc?export=view&id=1534QfOtszExXElbx-IMBFhkNulyzwAJ1)
 
 #### Going back to Windows to add the IP address to a Config file:
 
-#### :arrow_right_hook: Create new Config file for User
+### :arrow_right_hook: Create new Config file for User
 
 Run Powershell as **Administrator** and navigate to .ssh folder and create the file:
 ```
@@ -185,7 +185,7 @@ or
 New-Item config
 ```
 
-#### :arrow_right_hook: Add the following to the config file:
+### :arrow_right_hook: Add the following to the config file:
 ```
 # this is main user access
 Host dosvr2
@@ -204,7 +204,7 @@ Host dosvr2
 
 Save file.
 
-#### :arrow_right_hook: SSH via root access:
+### :arrow_right_hook: SSH via root access:
 
 From Powershell:
 ```
