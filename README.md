@@ -192,6 +192,16 @@ Host dosvr2
     Hostname {IP address}
     Identityfile C:/Users/{user}/.ssh/sfarhan-key
 ```
+Can use these for multiple users with different keys into same server:
+
+```
+Host host1
+  HostName {IP address} or user@domain.com
+  Match user user1  
+    IdentityFile ~/.ssh/privkeyforuser1
+  Match user user2
+    Identityfile ~/.ssh/privkeyforuser2
+```
 
 ![image](https://drive.google.com/uc?export=view&id=1-alnvO48gcScLHyvDkcfMO7KfKTyemzt)
 
